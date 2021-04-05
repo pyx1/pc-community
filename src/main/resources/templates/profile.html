@@ -1,0 +1,159 @@
+{{>headers}}
+
+<body>
+    {{>navbar}}
+    <div class="container">
+        <div class="row my-4">
+            <div class="col-sm-3">
+                <div style="width: 100%; border: 1.5px #000 solid">
+                    <ul>
+                        <li class="my-2"><a href=# onclick="change1()">Mi cuenta</a></li>
+                        <li class="my-2"><a href=# onclick="change2()">Pedidos</a></li>
+                        <li class="my-2"><a href=# onclick="change3()">Rese&ntilde;as</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-9" style="border: 1.5px #000 solid">
+                <!-- Zona de opciones -->
+                <!-- Datos campos de texto -->
+                {{#client}}
+                <div class="" id="profile-data" data-profile-id="{{idCustomer}}">
+                    <div class="row my-3">
+                        <div class="col-sm-4">
+                            <span class="noselect">Nombre</span>
+                            <input type="text" value="{{name}}">
+                        </div>
+                        <div class="col-sm-4">
+                            <span class="noselect">Apellido</span>
+                            <input type="text" value="{{surname}}">
+                        </div>
+                        <div class="col-sm-4">
+                            <span class="noselect">Telefono</span>
+                            <input type="text" value="{{phone}}">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row my-3">
+                        <div class="col-sm-4">
+                            <span class="noselect">Contrase&ntilde;a Antigua</span>
+                            <input id="oldPassword" type="password" placeholder="Password">
+                        </div>
+                        <div class="col-sm-4">
+                            <span class="noselect">Nueva contrase&ntilde;a</span>
+                            <input id="newPassword"type="password" placeholder="Password">
+                        </div>
+                        <div class="col-sm-4">
+                            <span class="noselect">Repetir nueva contrase&ntilde;a</span>
+                            <input id="confirmPassword"type="password" placeholder="Password">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row my-3">
+                        <div class="col-sm-4">
+                            <span class="noselect">Email actual</span>
+                            <input type="email" value="{{email}}">
+                        </div>
+                        <div class="col-sm-4">
+                            <span class="noselect">Repetir email</span>
+                            <input type="email" placeholder="Confirmar email">
+                        </div>
+                        <div class="col-sm-4">
+                            <span class="noselect">Nuevo email</span>
+                            <input type="email" placeholder="Nuevo email">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row my-3">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-8">
+                            <div class="row">
+                                <div class="col-sm-5"></div>
+                                <div class="col-sm-2">
+                                    <span>Direccion</span>
+                                </div>
+                                <div class="col-sm-5"></div>
+                            </div>
+
+                            <input type="text" value="{{direction}}" style="width: 100%;">
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                    <hr>
+                    <div class="row my-3">
+                        <div class="col-sm-9"></div>
+                        <div class="col-sm-3">
+                            <button class="btn btn-outline-success" onclick="saveChanges()">Guardar cambios </button>
+                        </div>
+                    </div>
+                </div>
+                {{/client}}
+                <!-- Pedidos lista de opciones -->
+                <div class="hidden" id="profile-orders">
+                    <div class="col-sm-12 mt-3">
+                        <!-- Por cada pedido-->
+                        
+                        <div class="row my-2" style="border:2px #000 solid; min-height: 30px;">
+                            <div class="col-sm-4" style="border-right: 1px #000 solid">
+                                <h6 class="mb-0">Fecha</h6>
+                            </div>
+                            <div class="col-sm-4">
+                                <h6 class="mb-0">Detalles del pedido</h6>
+                            </div>
+                            <div class="col-sm-4" style="border-left: 1px #000 solid">
+                                <h6 class="mb-0">Total €</h6>
+                            </div>
+                        </div>
+                        {{#orders}}
+                        <div class="row my-2" style="border:2px #000 solid; min-height: 30px;">
+                            <div class="col-sm-4" style="border-right: 1px #000 solid">
+                                <h6 class="mb-0">{{date}}</h6>
+                            </div>
+                            <div class="col-sm-4">
+                                <h6 class="mb-0">{{details}}</h6>
+                            </div>
+                            <div class="col-sm-4" style="border-left: 1px #000 solid">
+                                <h6 class="mb-0">{{totalPrice}} €</h6>
+                            </div>
+                        </div>
+                        {{/orders}}
+
+                    </div>
+                </div>
+                <!-- Reseñas lista de opciones -->
+                <div class="hidden" id="profile-opinions">
+                    <div class="col-sm-12 mt-3">
+                        <!-- Por cada pedido-->
+                        <div class="row my-2" style="border:2px #000 solid; min-height: 30px;">
+                            <div class="col-sm-4" style="border-right: 1px #000 solid">
+                                <h6 class="mb-0">Numero de review</h6>
+                            </div>
+                            <div class="col-sm-4">
+                                <a href="#">Acceso a producto</a>
+                            </div>
+                            <div class="col-sm-4" style="border-left: 1px #000 solid">
+                                <h6 class="mb-0">Valoracion estrellitas</h6>
+                            </div>
+                        </div>
+
+                        {{#reviews}}
+                        <div class="row my-2" style="border:2px #000 solid; min-height: 30px;">
+                            <div class="col-sm-4" style="border-right: 1px #000 solid">
+                                <h6 class="mb-0">{{idReview}}</h6>
+                            </div>
+                            <div class="col-sm-4">
+                                <a href="/producto/{{productId}}">{{productName}}</a>
+                            </div>
+                            <div class="col-sm-4" style="border-left: 1px #000 solid">
+                                <h6 class="mb-0" name="stars-holder" stars-number="{{stars}}"></h6>
+                            </div>
+                        </div>
+                        {{/reviews}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{>scripts}}
+    <script src="/js/profile.js"></script>
+</body>
