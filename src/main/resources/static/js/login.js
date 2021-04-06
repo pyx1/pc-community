@@ -106,18 +106,20 @@ function register() {
 function login() {
 
 	//To be implemented when sessions
-	console.log('dentro');
+
 	var r = document.getElementById('login').children;
 	var item =[r[0].value, r[1].value];
-	console.log(item);
+
 	var client = new XMLHttpRequest();
 	client.responseType = "json";
-	client.addEventListener('load', function () {
+	client.addEventListener('load', function (response) {
+		alert(response.target['response']);
+		location.reload();
 	});
 	client.open("POST", "/login");
 	client.setRequestHeader("Content-type", "application/json");
 	var body = JSON.stringify(item);
 	client.send(body);
-	location.reload();
+	
 
 }

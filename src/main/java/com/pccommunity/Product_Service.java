@@ -30,7 +30,6 @@ public class Product_Service {
         if(highlighted.size() <= 3){
             highlighted.add(allproducts.get(id));
             allproducts.get(id).adjustHighlighted("Highlighted");
-            System.out.println(allproducts.get(id) + " highlighted");
             return true;
         }else return false;
     }
@@ -65,7 +64,6 @@ public class Product_Service {
     public void reduceStock(long id, int s){
         Product p1 = allproducts.get(id);
         p1.setStock(p1.getStock() - s);
-        System.out.println(p1);
     }
 
     public Product deleteProduct(long id){
