@@ -99,8 +99,11 @@
                             <div class="col-sm-4">
                                 <h6 class="mb-0">Detalles del pedido</h6>
                             </div>
-                            <div class="col-sm-4" style="border-left: 1px #000 solid">
+                            <div class="col-sm-2" style="border-left: 1px #000 solid;border-right: 1px #000 solid">
                                 <h6 class="mb-0">Total €</h6>
+                            </div>
+                            <div class="col-sm-2" style="border-left: 1px #000 solid">
+                                <h6 class="mb-0">Estado</h6>
                             </div>
                         </div>
                         {{#orders}}
@@ -111,8 +114,11 @@
                             <div class="col-sm-4">
                                 <h6 class="mb-0">{{details}}</h6>
                             </div>
-                            <div class="col-sm-4" style="border-left: 1px #000 solid">
+                            <div class="col-sm-2" style="border-left: 1px #000 solid; border-right: 1px #000 solid">
                                 <h6 class="mb-0">{{totalPrice}} €</h6>
+                            </div>
+                            <div class="col-sm-2" style="border-left: 1px #000 solid">
+                                <h6 class="mb-0">{{state}}</h6>
                             </div>
                         </div>
                         {{/orders}}

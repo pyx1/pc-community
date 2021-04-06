@@ -69,7 +69,7 @@ function finishShopping() {
             detailsvalue = null;
             break;
     }
-    var item = { paymentMethod: "Card", state: "Ready", details: detailsvalue, date: today[1] + "/" + today[0] + "/" + today[2] };
+    var item = { paymentMethod: payment, state: "Requested", details: detailsvalue, date: today[1] + "/" + today[0] + "/" + today[2] };
     var client = new XMLHttpRequest();
     client.responseType = "json";
     client.addEventListener('load', function () {
