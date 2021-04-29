@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * Estilos para el proyecto pc-community
 
@@ -217,4 +218,225 @@ a::hover{
 	  padding: 0 5px;
 	  vertical-align: top;
 	  margin-left: -10px; 
+=======
+/*
+ * Estilos para el proyecto pc-community
+
+*/
+
+
+body {
+    padding-top: 56px;
+}
+
+input:invalid{
+	background-color: rgba(235,64,52,0.78);
+}
+
+a{
+	color: #E60000;
+}
+
+a::hover{
+	color: #00E6CE;
+}
+
+.hidden{ /* To Javascript to make it dissappear like a rabbit */
+	display: none;
+}
+.noselect {
+	-webkit-touch-callout: none; /* iOS Safari */
+	  -webkit-user-select: none; /* Safari */
+	   -khtml-user-select: none; /* Konqueror HTML */
+		 -moz-user-select: none; /* Old versions of Firefox */
+		  -ms-user-select: none; /* Internet Explorer/Edge */
+			  user-select: none; /* Non-prefixed version, currently
+									supported by Chrome, Edge, Opera and Firefox */
+  }
+
+.login-top{
+	margin: 0; 
+	padding: 0;
+	padding-left: 5%; 
+	border:2px solid #ee8902;  
+	width: 100%;
+	height: 50px; 
+	border-radius: 15px 15px 2px 2px
+}
+
+.login-mid{
+	padding: 0; 
+	padding-left: 5%; 
+	margin: 0; 
+	border:2px solid #ee8902; 
+	width: 100%; 
+	height: 50px; 
+	border-radius: 2px 2px 2px 2px
+}
+
+.login-bot{
+	padding: 0; 
+	padding-left: 5%; 
+	margin: 0; 
+	border:2px solid #ee8902; 
+	width: 100%; 
+	height: 50px; 
+	border-radius: 2px 2px 15px 15px
+}
+
+.login-button{
+	width: 100%; 
+	height: 55px; 
+	border: 0;
+	border-radius: 15px; 
+	background-color: #00cdff; 
+	justify-content: center; 
+	align-items: center;
+}
+
+.login-button:hover{
+	background-color: #F37854;
+}
+
+.buy-button{
+	width: 100%; 
+	height: 50px; 
+	border-radius: 40px; 
+	border: 0;
+	background-color: rgba(238,243,84,0.75);
+}
+
+.buy-button:hover{
+	background-color: rgba(238,243,84,1);
+}
+
+@media all and (min-width: 992px) {
+    .navbar .nav-item .dropdown-menu{ display: none; }
+    .navbar .nav-item:hover .nav-link{   }
+    .navbar .nav-item:hover .dropdown-menu{ 
+		display: block;
+		background-color: transparent;
+		border: 0;
+		 
+	}
+	.navbar .nav-item:hover .dropdown-menu .element-1{
+		animation: menu-catalogo 300ms ease-in-out;
+		width: 100%; 
+		height: 50px; 
+		background-color: rgba(254,159,31,0.5); 
+		align-items: center; 
+		justify-content: center; 
+		display: flex;
+	}
+	.navbar .nav-item:hover .dropdown-menu .element-2{
+		animation: menu-catalogo 600ms ease-in-out;
+		width: 100%; 
+		height: 50px; 
+		background-color: rgba(254,159,31,0.65); 
+		align-items: center; 
+		justify-content: center; 
+		display: flex;
+	}
+	.navbar .nav-item:hover .dropdown-menu .element-3{
+		animation: menu-catalogo 900ms ease-in-out;
+		width: 100%; 
+		height: 50px; 
+		background-color: rgba(254,159,31,0.8); 
+		align-items: center; 
+		justify-content: center; 
+		display: flex;
+	}
+	.navbar .nav-item:hover .dropdown-menu a{ 
+		color: #000;
+	}
+	.navbar .nav-item:hover .dropdown-menu a:hover{ 
+		color: #fff;
+	}
+	.navbar .nav-item:hover .dropdown-menu .element-1:hover{
+		background-color: rgba(254,159,31,1);
+	}
+	.navbar .nav-item:hover .dropdown-menu .element-2:hover{
+		background-color: rgba(254,159,31,1);
+	}
+	.navbar .nav-item:hover .dropdown-menu .element-3:hover{
+		background-color: rgba(254,159,31,1);
+	}
+    .navbar .nav-item .dropdown-menu{ margin-top:0; }
+}
+
+@keyframes menu-catalogo{
+	0% {
+		opacity:0;
+		transform: scale(0);
+	}
+	50%{
+		transform: scale(1.07);
+	}
+	100%{
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+.bg-custom{
+    background-color: rgba(254,159,31,0.8);
+    
+}
+
+.btn-round{
+	border: 0;
+	border-radius: 50%; /* Para poner el boton redondo */
+	height: 40px;
+	width: 40px;
+	
+}
+.btn-round:hover{
+	border: 2.05px outset rgba(0,0,0,0.7);
+	
+}
+
+.pop-up-anim{
+	animation: popup 2s;
+}
+
+.pop-out-anim{
+	animation: popup 2s reverse;
+}
+
+@keyframes popup{
+	0%{
+	transform: scale(0);
+	
+	}
+	
+	75%{
+	transform: scale(1.2);
+	}
+	
+	100%{
+	transform: scale(1);
+	}
+	
+}
+
+.badge {
+	padding-left: 9px;
+	padding-right: 9px;
+	-webkit-border-radius: 9px;
+	-moz-border-radius: 9px;
+	border-radius: 9px;
+  }
+  
+  .label-warning[href],
+  .badge-warning[href] {
+	background-color: #c67605;
+  }
+  #CartSpan {
+	  font-size: 12px;
+	  background: #ff0000;
+	  color: #fff;
+	  padding: 0 5px;
+	  vertical-align: top;
+	  margin-left: -10px; 
+>>>>>>> 74a060ef41211405c3b2d9186dd4e8562e6cf7cf
   }

@@ -1,3 +1,93 @@
+<<<<<<< HEAD
+{{>headers}}
+
+<body>
+    {{>navbar}}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 my-4" style="border: 3px #ee8902 solid;">
+                
+                    <!--Linea producto-->
+                    {{#carrito}}
+                <div class="row" style="width: 100%; height: 50px;" data-product-id="{{idProduct}}">
+                    <div class="col-sm-2 align-items-center justify-content-center"
+                        style="border-right: 2px #000 solid; display: flex;">
+                        <img style="height: 50px; width: 50px;" src="{{imageSource}}">
+                    </div>
+                    <div class="col-sm-8 align-items-center" style="display: flex;">
+                        <h5 class="mr-auto">{{name}}</h5>
+                        
+                        
+                        <h5 class="ml-auto">Unidades: <b name="units">1</b></h5>
+                    </div>
+                    <div class="col-sm-1 align-items-center justify-content-center"
+                        style="border-left: 2px #000 solid; display: flex;">
+                        <h4 name="price-holder" data-price={{price}}>{{price}} €</h4>
+                    </div>
+                    <div class="col-sm-1" style="border-left: 2px #000 solid; display: flex;">
+                        <button class="btn btn-outline-danger my-1 delete-btn" style="border-radius: 50%; height: 45px; width: 45px;"><i class="bi bi-trash-fill"></i></button>
+                    </div>
+                </div>
+                <hr style="height:2px; width: 100%; border-color: #000; margin: 0;">
+                {{/carrito}}
+                <div class="hidden"> <!--Generar -->
+                    {{#unidades}}
+                    <div name="uds-tag" data-uds="{{this}}"></div>
+                    {{/unidades}}
+                </div>
+                
+
+            </div>
+            <!--/cart-->
+            <div class="col-sm-12" style="background-color: #bebebe; height: 125px; border-radius: 10px;">
+                <div class="row">
+                    <div class="col-sm-4 my-3">
+                        <form style="width: 100%;" id="paymentMethod">
+                            <input type="radio" name="payment" value="card" checked>
+                            <label for="card">Tarjeta</label><br>
+                            <input type="radio" name="payment" value="bizum">
+                            <label for="bizum">Bizum</label><br>
+                            <input type="radio" name="payment" value="paypal">
+                            <label for="paypal">Paypal</label>
+                        </form>
+                    </div>
+                    <div class="col-sm-4 my-3">
+                        <div id="cardLabels" class="">
+                            <input type="text" id="cardNumber" placeholder="Numero tarjeta" style="width: 100%;">
+                            <input type="text" id="cardName" placeholder="Nombre Apellidos" style="width: 100%;">
+                            <input type="text" id="dateofExpiry" placeholder="MM/YY" pattern="[0-1][0-9]/[2-3][0-9]" style="width: 100%;">
+                        </div>
+                        <div id="bizumLabels" class="hidden">
+                            <input type="text" id="bizumNumber" placeholder="Numero para pedir el dinero" style="width: 100%;">
+                        </div>
+                        <div id="paypalLabels" class="hidden">
+                            <input type="email" id="paypalEmail" placeholder="alguien@ejemplo.com - Cuenta Paypal" style="width: 100%;">
+                        </div>
+                    </div>
+                    <div class="col-sm-4 ml-auto">
+                        <div class="row">
+                            <div class="col-sm-4 ml-auto">
+                                <small style="width: 100%;">Total: <b id="total">0 €</b></small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-6">
+                                <button id="payment-button" onclick="finishShopping()" class="btn btn-outline-success my-1" style="width: 100%;" payment-method="card"><i
+                                        class="bi bi-cash-stack mr-2"></i>Pagar</button>
+                            </div>
+                            <div class="col-sm-3"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    {{>scripts}}
+    <script src="/js/cart.js"></script>
+=======
 {{>headers}}
 
 <body>
@@ -83,4 +173,5 @@
     </div>
     {{>scripts}}
     <script src="/js/cart.js"></script>
+>>>>>>> 74a060ef41211405c3b2d9186dd4e8562e6cf7cf
 </body>
