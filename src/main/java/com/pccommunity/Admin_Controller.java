@@ -27,7 +27,7 @@ import org.springframework.http.ResponseEntity;
 public class Admin_Controller {
 
     @Autowired
-    private EntityManager eManager;
+    Product_Service product_Service;
     @Autowired
     Client_Service client_Service;
     @Autowired
@@ -35,7 +35,7 @@ public class Admin_Controller {
 
     @GetMapping("/")
     public String main(Model model){
-        List<Product> lProductos = eManager.createQuery("SELECT c FROM Product c").getResultList();
+        Collection<Product> lProductos = product_Service.getProducts().values();
 		model.addAttribute("productos", lProductos);
         return "admin/index";
     }
@@ -67,17 +67,16 @@ public class Admin_Controller {
 	@ResponseStatus(HttpStatus.CREATED)
     @Transactional
 	public ResponseEntity<Product> addProduct(@RequestBody Product p1){
-		eManager.persist(p1);
+		product_Service.createProduct(p1);
 		return new ResponseEntity<>(p1, HttpStatus.OK);
 	}
     @PostMapping("/product/delete/{id}")
     @Transactional
     public String deleteProduct(@PathVariable long id){
-        Product p1 = eManager.find(Product.class, id);
-        eManager.remove(p1);
+        product_Service.deleteProduct(id);
         return "redirect:/admin/";
     }
-    /*@PostMapping("/product/highlight/{id}")
+    @PostMapping("/product/highlight/{id}")
     public String highlightProduct(@PathVariable long id){
         if(product_Service.addHighlighted(id)) return "redirect:/admin/";
         else{
@@ -85,7 +84,7 @@ public class Admin_Controller {
             throw new ResponseStatusException(HttpStatus.valueOf(500));
 
         } 
-    }*/
+    }
     @DeleteMapping("/product/highlight/{id}")
     public String rhighlightProduct(@PathVariable long id){
         //product_Service.removeHighLight(id);

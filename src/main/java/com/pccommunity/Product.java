@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class Product {
     
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long idProduct;
     private String name;
     private String imageSource;

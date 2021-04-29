@@ -3,6 +3,8 @@ package com.pccommunity;
 
 import java.util.*;
 
+import javax.persistence.EntityManager;
+
 /* Imports */
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,8 @@ import org.springframework.web.server.ResponseStatusException;
 @Controller
 public class Main_Controller {
 
+	@Autowired
+    private EntityManager eManager;
 	@Autowired
 	Product_Service product_Service;
 	@Autowired
@@ -62,12 +66,12 @@ public class Main_Controller {
 
 	@GetMapping("/profile")
 	public String profile(Model model) {
-		model.addAttribute("client", client_Service.getFirstClient());
-		model.addAttribute("orders", orders_Service.getOrdersByClient(client_Service.getFirstClient()));
-		model.addAttribute("reviews", review_Service.getReviewsFromClient(client_Service.getFirstClient()));
+		model.addAttribute("client", client_Service.getClient(1));
+		model.addAttribute("orders", orders_Service.getOrdersByClient(client_Service.getClient(1)));
+		model.addAttribute("reviews", review_Service.getReviewsFromClient(client_Service.getClient(1)));
 		return "profile";
 	}
-	@PutMapping("/profile/{id}")
+	/*@PutMapping("/profile/{id}")
 	public ResponseEntity<Customer> profileedit(Model model,@PathVariable long id, @RequestBody New_Client nc2) {
 		Customer c1 = client_Service.getFirstClient();
 		Customer c2 = new Customer(nc2);
@@ -79,12 +83,12 @@ public class Main_Controller {
 		client_Service.updateUser(id,c1);
 		System.out.println(client_Service.getallClients());
 		return new ResponseEntity<>(c1, HttpStatus.OK);
-	}
+	}*/
 
 	@GetMapping("/cart")
 	public String cart(Model model) {
-		model.addAttribute("carrito", client_Service.getFirstClient().getallCart().keySet());
-		model.addAttribute("unidades", client_Service.getFirstClient().getallCart().values());
+		model.addAttribute("carrito", client_Service.getallCart(0).keySet());
+		model.addAttribute("unidades", client_Service.getallCart(0).values());
 		return "cart";
 	}
 	
@@ -94,35 +98,35 @@ public class Main_Controller {
 	public ResponseEntity<Map<Product, Integer>> createProduct(@RequestBody List<String> pet){
 		int uds = Integer.parseInt(pet.get(1));
 		long id = Long.parseLong(pet.get(0));
-		Product p1 = product_Service.getProduct(id);
-		client_Service.getFirstClient().addToCart(p1, uds);
-		product_Service.reduceStock(id, uds);
-		return new ResponseEntity<>(client_Service.getFirstClient().getallCart(), HttpStatus.OK);
+		Product p1 = (Product)eManager.createQuery("SELECT c FROM Product WHERE id = '"+ id +"'"); 
+		client_Service.addToCart(0, p1, uds);
+		p1.setStock(p1.getStock() - uds);
+		return new ResponseEntity<>(client_Service.getallCart(0), HttpStatus.OK);
 
 	}
 	@DeleteMapping("/cart")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public ResponseEntity<Map<Product,Integer>> deleteProduct(@RequestBody Long id){
-		Product p1 = product_Service.getProduct(id);
-		client_Service.getFirstClient().deleteProduct(p1);
-		return new ResponseEntity<>(client_Service.getFirstClient().getallCart(), HttpStatus.OK);
+		Product p1 = (Product)eManager.createQuery("SELECT c FROM Product WHERE id = '"+ id +"'"); ;
+		client_Service.deleteProduct(0, p1);
+		return new ResponseEntity<>(client_Service.getallCart(0), HttpStatus.OK);
 
 	}
 	@PostMapping("/complete")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Order> completeOrder(@RequestBody Order order1){
-		orders_Service.assingClient(order1, client_Service.getFirstClient());
-		orders_Service.addOrder(order1, client_Service.getFirstClient().getallCart());
-		client_Service.getFirstClient().cleanCart();
+		orders_Service.assingClient(order1, client_Service.getLoggedClient(0));
+		orders_Service.addOrder(order1, client_Service.getallCart(0));
+		client_Service.cleanCart(0);
 		return new ResponseEntity<>(order1, HttpStatus.OK);
 	}
 
 	@GetMapping("/producto/{id}")
 	public String product(Model model, @PathVariable long id) {
-		if(product_Service.getProducts().containsKey(id)){
+		if(eManager.find(Product.class, id) != null){
 			Product producto = product_Service.getProduct(id);
 			model.addAttribute("producto", producto);
-			model.addAttribute("carrito", client_Service.getFirstClient().getallCart().keySet());
+			model.addAttribute("carrito", client_Service.getallCart(0).keySet());
 			model.addAttribute("reviews", review_Service.getReviewsFromProduct(producto));
 			return "product";
 		}else{
@@ -130,13 +134,13 @@ public class Main_Controller {
 		}
 		
 	}
-	@PostMapping("/producto/{id}")
+	/*@PostMapping("/producto/{id}")
 	public ResponseEntity<Review> newProductoReview(Model model, @PathVariable long id, @RequestBody Review r1) {
 		Product p1 = product_Service.getProduct(id);
 		review_Service.addReview(r1, client_Service.getFirstClient(), p1);
 		p1.adjustStars(review_Service.starsAverage(p1));
 		return new ResponseEntity<>(r1, HttpStatus.OK);
-	}
+	}*/
 	
 	@GetMapping("/login")
 	public String login(Model model) {

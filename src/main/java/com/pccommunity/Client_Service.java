@@ -5,6 +5,9 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+import javax.swing.plaf.synth.SynthTextAreaUI;
+import javax.transaction.Transactional;
 
 import java.util.*;
 
@@ -21,11 +24,18 @@ public class Client_Service {
 
     public Boolean loginClient(String email, String pass){
         try{
-            Customer c = (Customer)eManager.createQuery("SELECT email, password FROM Customer WHERE email = '"+ email +"' ").getSingleResult();
-            lclients.put(c, new ConcurrentHashMap<>());
-            return true;
+            TypedQuery<Customer> query = eManager.createNamedQuery("Customer.getByEmail", Customer.class)
+            .setParameter("email", email)
+            .setMaxResults(1);
+            Customer c = query.getSingleResult();
+            if(c.getPassword().equals(pass)){
+                lclients.put(c, new ConcurrentHashMap<>());
+                return true;
+            }
+            else return false;
         }
         catch(Exception e){
+            System.out.println(e);
             if(e instanceof NoResultException){
                 System.out.println("[!]No existe el usuario");
                 return false;
@@ -36,9 +46,10 @@ public class Client_Service {
         
 
     }
+    @Transactional
     public Customer createUser(Customer c1){
         eManager.persist(c1);
-        System.out.println("[!]Usuario creado " + c1);
+        System.out.println("[*]Usuario creado: " + c1);
         return c1;
     }
 
@@ -68,7 +79,7 @@ public class Client_Service {
         
 
     }*/
-
+    @Transactional
     public Customer deleteClient(long id){
         List<Customer> l1 = eManager.createQuery("SELECT c FROM Customer c").getResultList();
         for(Customer c : l1){

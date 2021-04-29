@@ -1,3 +1,4 @@
+/*
 package com.pccommunity;
 
 import java.util.*;
@@ -110,7 +111,7 @@ public class Rest_Controller {
     }
 
     /* Admin Section */
-
+    /*
     @PostMapping("/admin/product")
     public ResponseEntity<Product> registerNewProductAPI(@RequestBody Product p1){
         product_Service.createProduct(p1);
@@ -168,4 +169,4 @@ public class Rest_Controller {
         return new ResponseEntity<>(orders_Service.updateOrder(id), HttpStatus.OK);
     }
     
-}
+}*/

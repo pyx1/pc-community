@@ -7,12 +7,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+
+@NamedQueries({
+    @NamedQuery(name = "Customer.getByEmail", query = "SELECT c FROM Customer c WHERE email = :email"),
+})
 
 @Entity
 public class Customer{
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long idCustomer;
     private String name;
     private String surname;
