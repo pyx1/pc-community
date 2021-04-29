@@ -3,6 +3,39 @@ document.addEventListener("DOMContentLoaded", function(){
     setcartspan();
 })
 
+function createSElem(element){
+    var child = document.createElement('DIV');
+    child.innerHTML = "<div class='row' style='height: 75px; width: 100%;'> \
+    <div class='col-4' style='border-right: 1px #000000 solid'> \
+      <div class='row ml-1 justify-content-center align-items-center' style='height: 100%;'>\
+        <img src='"+ element.imageSource +"' style='height: 50px; width: 50px;'> \
+      </div> \
+    </div> \
+    <div class='col-8'>\
+      <div class='row ml-1 justify-content-center align-items-center' style='height: 100%;'> \
+        <a href='/producto/"+element.idProduct+"'>"+ element.name +"</a> \
+      </div> \
+    </div> \
+  </div> \
+  <hr>";
+    child = child.firstChild;
+    document.getElementById('searchPlacer').appendChild(child);
+}
+
+function search(){
+    var sbox = document.getElementById('searchBar');
+    var search = sbox.value;
+    var client = new XMLHttpRequest();
+    client.responseType = "json";
+    client.addEventListener("load", function(){
+        document.getElementById('searchPlacer').innerHTML="";
+        for(let elem in this.response){
+            createSElem(this.response[elem]);
+        }
+    });
+    client.open("POST", "/catalogo");
+    client.send(search);
+}
 function changepath(){
     var path = window.location.pathname;
     var child = document.createElement('span');

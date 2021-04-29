@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {{>headers}}
 <body>
     {{>admin/admin-navbar}}
@@ -56,63 +55,4 @@
     </div>
 {{>scripts}}
 <script src="/js/admin/orders.js"></script>
-=======
-{{>headers}}
-<body>
-    {{>admin/admin-navbar}}
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                
-                <div class="row my-2">
-                    <div class="col-sm-1">
-                        <div class="row align-self-center justify-content-center"><h5>U. Id</h5></div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="row align-self-center justify-content-center"><h5>Tipo de pago</h5></div>
-                    </div>
-
-                    <div class="col-sm-2">
-                        <div class="row align-self-center justify-content-center"><h6>Numero de productos</h6></div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="row align-self-center justify-content-center"><h6>Total</h6></div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="row align-self-center justify-content-center"><h6>Detalles de pago</h6></div>
-                    </div>
-                    
-                    
-                </div>
-                {{#orders}}
-                <div class="row my-2">
-                    <div class="col-sm-1">
-                        <div class="row align-self-center justify-content-center"><h4>{{idClient}}</h4></div>
-                    </div>  
-                    <div class="col-sm-2">
-                        <div class="row align-self-center justify-content-center"><h6>{{paymentMethod}}</h6></div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="row align-self-center justify-content-center">
-                            <h6>{{productNumber}}</h6>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="row align-self-center justify-content-center"><h6>{{totalPrice}} €</h6></div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="row align-self-center justify-content-center"><h6>{{details}}</h6></div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="row align-self-center justify-content-end"><button name="order-btn" data-state="{{state}}" name="order-btn" id="btn-order-{{idOrder}}" class="btn btn-outline-success" onclick='updateOrder({{idOrder}})'>Tramitar</button></div>
-                    </div>
-                </div>
-                {{/orders}}
-
-            </div>
-        </div>
-    </div>
-{{>scripts}}
-<script src="/js/admin/orders.js"></script>
->>>>>>> 74a060ef41211405c3b2d9186dd4e8562e6cf7cf
 </body>

@@ -47,7 +47,27 @@
     };
     getunits();
 
+    $(".delete-btn").on('click', function(){
+        var id = this.parentElement.parentElement.getAttribute('data-product-id');
+        deleteProd(id);
+
+    });
+
 })(jQuery);
+
+
+function deleteProd(id){
+    var client = new XMLHttpRequest();
+    client.responseType = "json";
+    client.addEventListener('load', function () {
+        location.reload();
+    });
+    client.open("DELETE", "/cart");
+    client.setRequestHeader("Content-type", "application/json");
+    var body = JSON.stringify(id);
+    client.send(body);
+}
+
 
 function finishShopping() {
     var today = new Date().toLocaleDateString("en-US").split("/"); // mm - dd - yyyy
@@ -69,7 +89,7 @@ function finishShopping() {
             detailsvalue = null;
             break;
     }
-    var item = { paymentMethod: "Card", state: "Ready", details: detailsvalue, date: today[1] + "/" + today[0] + "/" + today[2] };
+    var item = { paymentMethod: payment, state: "Requested", details: detailsvalue, date: today[1] + "/" + today[0] + "/" + today[2] };
     var client = new XMLHttpRequest();
     client.responseType = "json";
     client.addEventListener('load', function () {
