@@ -3,8 +3,16 @@ package com.pccommunity;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Customer{
 
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private long idCustomer;
     private String name;
     private String surname;
@@ -12,7 +20,6 @@ public class Customer{
     private String phone;
     private String password;
     private String direction;
-    private Map<Product, Integer> cart = new ConcurrentHashMap<>();
 
     public Customer() {
     }
@@ -43,40 +50,6 @@ public class Customer{
         this.password = password;
         this.direction = direction;
     }
-
-    public void cleanCart(){
-        this.cart.clear();
-
-    }
-
-    public void addToCart(Product p1, int n){
-        if(this.cart.containsKey(p1)){
-            cart.put(p1, n + cart.get(p1));
-        }else{
-            cart.put(p1, n);
-        }
-        
-    }
-
-    public void updateCartinOne(Product p1){
-        this.cart.put(p1, this.cart.get(p1) + 1);
-    }
-    public void updateCartinOneLess(Product p1){
-        this.cart.put(p1, this.cart.get(p1) - 1);
-    }
-
-    public void deleteProduct(Product p1){
-        this.cart.remove(p1);
-    }
-
-    public Map<Product, Integer> getallCart(){
-        return this.cart;
-    }
-
-    public int getCartProdNumber(Product p1){
-        return cart.get(p1);
-    }
-
     
 
     public void setIdCustomer(long idCustomer) {
@@ -133,6 +106,12 @@ public class Customer{
 
     public String getDirection() {
         return direction;
+    }
+
+    public boolean equalsId(long id){
+        if(this.idCustomer == id) return true;
+        else return false;
+
     }
 
     @Override
