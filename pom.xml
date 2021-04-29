@@ -31,6 +31,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+<<<<<<< HEAD
 
 		<dependency>
 			<groupId>mysql</groupId>
@@ -42,6 +43,8 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+=======
+>>>>>>> 74a060ef41211405c3b2d9186dd4e8562e6cf7cf
 	</dependencies>
 
 	<build>
