@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {{>headers}}
 <body>
     {{>admin/admin-navbar}}
@@ -51,58 +50,4 @@
     </div>
     {{>scripts}}
     <script src="/js/admin/profiles.js"></script>
-=======
-{{>headers}}
-<body>
-    {{>admin/admin-navbar}}
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                
-                <div class="row my-2">
-                    <div class="col-sm-1">
-                        <div class="row align-self-center justify-content-center"><h4>Id</h4></div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="row align-self-center justify-content-center"><h4>Email</h4></div>
-                    </div>
-
-                    <div class="col-sm-3">
-                        <div class="row align-self-center justify-content-center"><h6>Numero de pedidos</h6></div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="row align-self-center justify-content-center"><h6>Numero de valoraciones</h6></div>
-                    </div>
-                    
-                    
-                </div>
-                {{#clients}}
-                <div class="row my-2" data-client-id="{{idCustomer}}">
-                    <div class="col-sm-1">
-                        <div class="row align-self-center justify-content-center"><h6>{{idCustomer}}</h6></div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="row align-self-center justify-content-center"><h6>{{email}}</h6></div>
-                    </div>
-
-                    <div class="col-sm-3"><!--Implementar con Api-->
-                        <div class="row align-self-center justify-content-center"><h6 name="orders-amount">0</h6></div>
-                    </div>
-                    <div class="col-sm-3"><!--Implementar con api-->
-                        <div class="row align-self-center justify-content-center"><h6 name="reviews-amount">0</h6></div>
-                    </div>
-                    <div class="col-sm-3">
-                        <form action="/admin/profile/delete/{{idCustomer}}" method="POST">
-                        <button class="btn btn-outline-danger">Eliminar</button>
-                    </form>
-                    </div>
-                </div>
-                {{/clients}}
-
-            </div>
-        </div>
-    </div>
-    {{>scripts}}
-    <script src="/js/admin/profiles.js"></script>
->>>>>>> 74a060ef41211405c3b2d9186dd4e8562e6cf7cf
 </body>

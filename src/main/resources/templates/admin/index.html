@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 {{>headers}}
 
 <body>
@@ -39,46 +38,4 @@
   </div>
   {{>scripts}}
   <script src="/js/admin/main.js"></script>
-=======
-{{>headers}}
-
-<body>
-  {{>admin/admin-navbar}}
-  <div class="container">
-    <div class="row mt-5">
-      <div class="col-lg-3">
-        <a href="newproduct"><button class="btn btn-outline-success">Agregar producto</button></a>
-      </div>
-      <div class="col-lg-9">
-        <div class="row">
-          {{#productos}}
-          <div class="col-lg-4 col-md-6 mb-4" name="fichasProductos">
-            <div class="card h-100">
-              <a href="#"><img class="card-img-top" src="{{imageSource}}" alt=""></a>
-              <div class="card-body">
-                <h4 class="card-title">
-                  <a href="#">{{name}}</a>
-                </h4>
-                <h5>{{price}} €</h5>
-                <p class="card-text">{{description}}</p>
-              </div>
-              <div class="card-footer">
-                <div class="row">
-                  <form action="/admin/product/delete/{{idProduct}}" method="POST">
-                    <button class="btn btn-outline-danger mr-auto">Eliminar</button>
-                  </form>
-                    <button class="btn btn-outline-info ml-auto" name="btn-highlight" id="btn-hi-{{idProduct}}" data-hightlight="{{highlighted}}" onclick="throwAction({{idProduct}})"><i class="bi bi-brightness-high"></i></button>
-                  
-                </div>
-              </div>
-            </div>
-          </div>
-          {{/productos}}
-        </div>
-      </div>
-    </div>
-  </div>
-  {{>scripts}}
-  <script src="/js/admin/main.js"></script>
->>>>>>> 74a060ef41211405c3b2d9186dd4e8562e6cf7cf
 </body>
