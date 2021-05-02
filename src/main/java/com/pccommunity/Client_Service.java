@@ -18,16 +18,12 @@ import org.springframework.stereotype.Service;
 public class Client_Service {
 
     @Autowired
-    private EntityManager eManager;
+    private Client_Repository client_Repository;
     private Map<Customer, Map<Product, Integer>> lclients = new ConcurrentHashMap<>();
-
 
     public Boolean loginClient(String email, String pass){
         try{
-            TypedQuery<Customer> query = eManager.createNamedQuery("Customer.getByEmail", Customer.class)
-            .setParameter("email", email)
-            .setMaxResults(1);
-            Customer c = query.getSingleResult();
+            Customer c = client_Repository.findByEmail(email);
             if(c.getPassword().equals(pass)){
                 lclients.put(c, new ConcurrentHashMap<>());
                 return true;
@@ -42,23 +38,22 @@ public class Client_Service {
             }
             else return false; 
         }
-        
-        
-
     }
     @Transactional
     public Customer createUser(Customer c1){
-        eManager.persist(c1);
+        client_Repository.saveAndFlush(c1);
         System.out.println("[*]Usuario creado: " + c1);
         return c1;
     }
 
     public Customer getClient(long id){
-        List<Customer> l1 = eManager.createQuery("SELECT c FROM Customer c").getResultList(); 
-        for(Customer c : l1){
-            if(c.equalsId(id)) return c;
+        Optional<Customer> c1 = client_Repository.findById(id); 
+        if(c1.isPresent()){
+            return c1.get();
         }
-        return null;
+        else{
+            return null;
+        }
     }
     public Customer getLoggedClient(long id){
         for(Customer c : lclients.keySet()){
@@ -68,7 +63,7 @@ public class Client_Service {
     }
 
     public List<Customer> getallClients(){
-        List<Customer> l1 = eManager.createQuery("SELECT c FROM Customer c").getResultList();
+        List<Customer> l1 = client_Repository.findAll();
         return l1;
     }
      //Falta el updat
@@ -79,16 +74,10 @@ public class Client_Service {
         
 
     }*/
-    @Transactional
     public Customer deleteClient(long id){
-        List<Customer> l1 = eManager.createQuery("SELECT c FROM Customer c").getResultList();
-        for(Customer c : l1){
-            if(c.equalsId(id)){
-                eManager.remove(c);
-                return c;
-            }
-        }
-        return null;
+        Customer c = client_Repository.getOne(id);
+        client_Repository.delete(c);
+        return c;
     }
     
     public void cleanCart(long idCustomer){

@@ -10,10 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
-@NamedQueries({
-    @NamedQuery(name = "Customer.getByEmail", query = "SELECT c FROM Customer c WHERE email = :email"),
-})
-
 @Entity
 public class Customer{
 
