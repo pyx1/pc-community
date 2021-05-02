@@ -15,45 +15,36 @@ import java.util.*;
 public class Product_Service {
 
     @Autowired
-    private EntityManager eManager; 
+    private Product_Repository product_Repository;
     private List<Product> highlighted = new ArrayList<Product>();
     private AtomicLong lastId = new AtomicLong();
     
     public Map<Long, Product> getProducts(){
         Map <Long, Product> n1 = new ConcurrentHashMap<>();
-        List<Product> q1 = eManager.createQuery("SELECT c FROM Product c").getResultList();
+        List<Product> q1 = product_Repository.findAll();
         for(Product p1 : q1){
             n1.put(p1.getidProduct(), p1);
         }
         return n1;
     }
-    @Transactional
     public Product getProduct(long id){
-        return eManager.find(Product.class, id);
+        return product_Repository.getOne(id);
     }
 
     public List<Product> getProductsFiltered(String a){
-        List<Product> l = eManager.createQuery("SELECT c FROM Product c").getResultList();
-        List<Product> l1 = new ArrayList<>();
-        for(Product p1 : l){
-            if(p1.getCategoria().equals(a)) l1.add(p1);
-        }
-        return l1;
+        List<Product> l = product_Repository.findByCategory(a);
+        return l;
     }
 
     public List<Product> searchProduct(String str){
-        List<Product> l = eManager.createQuery("SELECT c FROM Product c").getResultList();
-        List<Product> l1 = new ArrayList<Product>();
-        for(Product p1 : l){
-            if(p1.getName().contains(str)) l1.add(p1);
-        }
-        return l1;
+        List<Product> l = product_Repository.findByName(str);
+        return l;
     }
 
     public boolean addHighlighted(long id){
         if(highlighted.size() < 3){
-            highlighted.add(getProduct(id));
-            getProduct(id).adjustHighlighted("Highlighted");
+            highlighted.add(product_Repository.getOne(id));
+            product_Repository.getOne(id).adjustHighlighted("Highlighted");
             return true;
         }else return false;
     }
@@ -68,27 +59,22 @@ public class Product_Service {
     }
     @Transactional
     public void createProduct(Product p1){
-        eManager.persist(p1);
+        product_Repository.save(p1);
     }
 
     public List<Product> getProdsByList(List<Long> ids){
-        List<Product> products= new ArrayList<Product>();
-        for(int i = 0; i < ids.size(); i++){
-            products.add(getProduct(i));
-        }
+        List<Product> products= product_Repository.findAllById(ids);
         return products;
     }
 
-    
-
     public void reduceStock(long id, int s){
-        Product p1 = getProduct(id);
+        Product p1 = product_Repository.getOne(id);
         p1.setStock(p1.getStock() - s);
     }
     @Transactional
     public Product deleteProduct(long id){
-        Product p1 = getProduct(id);
-        eManager.remove(p1);
+        Product p1 = product_Repository.getOne(id);
+        product_Repository.delete(p1);
         return p1;
     }
 
