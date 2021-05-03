@@ -1,11 +1,11 @@
 package com.pccommunity;
 
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
@@ -47,7 +47,7 @@ public class Order_Product {
     public void setProduct(Product p) {
         this.productId = p;
     }
-
+    @JsonIgnore
     public Order getOrder() {
         return orderId;
     }

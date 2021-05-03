@@ -1,12 +1,8 @@
 package com.pccommunity;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-import javax.swing.plaf.synth.SynthTextAreaUI;
 import javax.transaction.Transactional;
 
 import java.util.*;
@@ -92,12 +88,18 @@ public class Client_Service {
     }
 
     public void addToCart(long idCustomer, Product p1, int n){
+        boolean con = false;
+        Product pcon = new Product();
         for(Customer c : lclients.keySet()){
-            System.out.println("Cliente : " + c);
             if(c.equalsId(idCustomer)){
-                System.out.println("Añadiendo a carrito");
-                
-                lclients.get(c).put(p1, n);
+                for(Product ph : lclients.get(c).keySet()){
+                    if(ph.equalsId(p1)){
+                        con = true;
+                        pcon = ph;
+                    } 
+                }
+                if(!con) lclients.get(c).put(p1, n);
+                else lclients.get(c).put(pcon, lclients.get(c).get(pcon) + n);
             }
         }
         
@@ -145,13 +147,18 @@ public class Client_Service {
         for(Customer c : lclients.keySet()){
             if(c.equalsId(idCustomer)){
                 Map<Product, Integer> nc = lclients.get(c);
-                return nc.get(p1);
+                return nc.get(containsCart(nc, p1));
             }
         }
         return 0;
     }
 
-    
+    public Product containsCart(Map<Product, Integer> m1, Product p){
+        for(Product ph : m1.keySet()){
+            if(ph.equalsId(p)) return ph;
+        }
+        return null;
+    }
 
     public String generateBase64(String email, long id){
         String str =  "{id:"+ id +"email:" + email +"}"; 

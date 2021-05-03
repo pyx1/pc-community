@@ -40,6 +40,7 @@ public class Main_Controller {
 
 	@GetMapping("/")
 	public String index(Model model) {
+		model.addAttribute("highlight", product_Service.getHighlighted());
 		return "index";
 
 	}
@@ -92,9 +93,6 @@ public class Main_Controller {
 
 	@GetMapping("/cart")
 	public String cart(@CookieValue(name = "sessionid", required = false) String sessionid, Model model) {
-		for (Product p : client_Service.getallCart(1).keySet()) {
-			System.out.println(p.getIdProduct());
-		}
 		model.addAttribute("carrito", client_Service.getallCart(1).keySet());
 		model.addAttribute("unidades", client_Service.getallCart(1).values());
 		return "cart";
@@ -121,6 +119,7 @@ public class Main_Controller {
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public ResponseEntity<Map<Product, Integer>> deleteProduct(@RequestBody Long id) {
 		Product p1 = product_Service.getProduct(id);
+		product_Service.incrementStock(id, client_Service.getCartProdNumber(1, p1));
 		client_Service.deleteProduct(1, p1);
 		return new ResponseEntity<>(client_Service.getallCart(1), HttpStatus.OK);
 

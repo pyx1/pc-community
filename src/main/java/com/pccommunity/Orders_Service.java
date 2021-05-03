@@ -1,9 +1,4 @@
 package com.pccommunity;
-
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
-
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import java.util.*;

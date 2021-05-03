@@ -1,7 +1,6 @@
 package com.pccommunity;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 
 import javax.transaction.Transactional;
 
@@ -16,7 +15,6 @@ public class Product_Service {
     @Autowired
     private Product_Repository product_Repository;
     private List<Product> highlighted = new ArrayList<Product>();
-    private AtomicLong lastId = new AtomicLong();
     
     public Map<Long, Product> getProducts(){
         Map <Long, Product> n1 = new ConcurrentHashMap<>();
@@ -36,11 +34,12 @@ public class Product_Service {
     }
 
     public List<Product> searchProduct(String str){
-        List<Product> l = product_Repository.findByName(str);
+        List<Product> l = product_Repository.findByNameStartsWith(str);
         return l;
     }
 
     public boolean addHighlighted(long id){
+        highlighted = product_Repository.findByHighlighted("Highlighted");
         Product p1 = product_Repository.getOne(id);
         if(highlighted.size() < 3){
             highlighted.add(p1);
@@ -51,10 +50,12 @@ public class Product_Service {
     }
 
     public Collection<Product> getHighlighted(){
+        highlighted = product_Repository.findByHighlighted("Highlighted");
         return highlighted;
     }
 
     public void removeHighLight(long id){
+        highlighted = product_Repository.findByHighlighted("Highlighted");
         Product p1 = getProduct(id);
         highlighted.remove(p1); 
         p1.adjustHighlighted("");
@@ -78,6 +79,12 @@ public class Product_Service {
     public void reduceStock(long id, int s){
         Product p1 = product_Repository.getOne(id);
         p1.setStock(p1.getStock() - s);
+        product_Repository.saveAndFlush(p1);
+    }
+
+    public void incrementStock(long id, int s){
+        Product p1 = product_Repository.getOne(id);
+        p1.setStock(p1.getStock() + s);
         product_Repository.saveAndFlush(p1);
     }
 

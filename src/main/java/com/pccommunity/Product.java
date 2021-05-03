@@ -4,8 +4,6 @@ import java.util.Set;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
 @Entity
 public class Product {
     
@@ -155,7 +153,6 @@ public class Product {
     public boolean equals(Object object) {
         if (this == object) return true;
         Product producto = (Product) object;
-        System.out.println(idProduct + " " + producto.getIdProduct());
         return idProduct == producto.getIdProduct();
     }
     @Override
