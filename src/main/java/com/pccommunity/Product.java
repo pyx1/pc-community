@@ -107,6 +107,9 @@ public class Product {
     public int getStock() {
         return stock;
     }
+    public int getStarsAverage() {
+        return starsAverage;
+    }
 
     public String getBannerSource1() {
         return bannerSource1;

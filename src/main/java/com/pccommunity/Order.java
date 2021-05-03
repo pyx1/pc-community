@@ -22,7 +22,7 @@ public class Order {
     private Customer client; //By id
 
     @OneToMany(mappedBy = "productId")
-    private Set<Order_Product> prods; //Map products and units
+    private List<Order_Product> prods; //Map products and units
 
 
     public Order() {
@@ -33,12 +33,15 @@ public class Order {
         this.paymentMethod = paymentMethod;
         this.state = state;
         this.date = date;
+        this.prods = new ArrayList<>();
     }
 
     public void addProducts(Map<Product, Integer> m1){
         for(Product p : m1.keySet()){
-            prods.add(new Order_Product(p, this, m1.get(p)));
+            Order_Product o1 = new Order_Product(p, this, m1.get(p));
+            prods.add(o1);
         }
+        System.out.println(prods);
     }
 
 

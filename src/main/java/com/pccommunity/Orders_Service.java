@@ -18,7 +18,7 @@ public class Orders_Service {
         long id = lastId.getAndIncrement();
         o1.setIdOrder(id);
         o1.addProducts(m1);
-        order_Repository.saveAndFlush(o1);
+        //order_Repository.saveAndFlush(o1);
         return o1;
     }
     public void assingClient(Order o1, Customer client){
