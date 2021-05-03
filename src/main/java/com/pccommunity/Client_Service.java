@@ -15,8 +15,6 @@ public class Client_Service {
 
     @Autowired
     private Client_Repository client_Repository;
-    @Autowired
-    private Product_Repository product_Repository;
     private Map<Customer, Map<Product, Integer>> lclients = new ConcurrentHashMap<>();
     private Map<String, Customer> sessions = new ConcurrentHashMap<>();
 
@@ -34,7 +32,7 @@ public class Client_Service {
         catch(Exception e){
             System.out.println(e);
             if(e instanceof NoResultException){
-                System.out.println("[!]No existe el usuario");
+                System.out.println("[!]No existe el email");
                 return "UserNotFound";
             }
             else return null; 
@@ -67,7 +65,6 @@ public class Client_Service {
         List<Customer> l1 = client_Repository.findAll();
         return l1;
     }
-     //Falta el updat
      
     public void updateUser(long id, Customer c1){
         client_Repository.saveAndFlush(c1);

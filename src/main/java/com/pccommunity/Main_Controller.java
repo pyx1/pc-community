@@ -169,7 +169,7 @@ public class Main_Controller {
 		}
 	}
 
-	@PostMapping("/login") // It should return the session cookie, but thats for the future
+	@PostMapping("/login") // It returns the session cookie, but thats for the future
 	@ResponseStatus(HttpStatus.CREATED)
 	public String loginUser(@RequestBody List<String> data, HttpServletResponse response) {
 		String consul = client_Service.loginClient(data.get(0), data.get(1));
