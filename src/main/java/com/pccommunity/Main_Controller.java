@@ -68,23 +68,27 @@ public class Main_Controller {
 
 	@GetMapping("/profile")
 	public String profile(@CookieValue(name = "sessionid", required = false) String sessionid, Model model) {
-		if(sessionid != null){
+		if (sessionid != null) {
 			model.addAttribute("client", client_Service.getClient(1));
 			model.addAttribute("orders", orders_Service.getOrdersByClient(client_Service.getClient(1)));
 			model.addAttribute("reviews", review_Service.getReviewsFromClient(client_Service.getClient(1)));
 			return "profile";
-		}else throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+		} else
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 	}
-	/*
-	 * @PutMapping("/profile/{id}") public ResponseEntity<Customer>
-	 * profileedit(Model model,@PathVariable long id, @RequestBody New_Client nc2) {
-	 * Customer c1 = client_Service.getFirstClient(); Customer c2 = new
-	 * Customer(nc2); c1.setName(c2.getName()); c1.setSurname(c2.getSurname());
-	 * c1.setDirection(c2.getDirection()); c1.setPhone(c2.getPhone());
-	 * c1.setPassword(c2.getPassword()); client_Service.updateUser(id,c1);
-	 * System.out.println(client_Service.getallClients()); return new
-	 * ResponseEntity<>(c1, HttpStatus.OK); }
-	 */
+
+	@PutMapping("/profile/{id}")
+	public ResponseEntity<Customer> profileedit(Model model, @PathVariable long id, @RequestBody New_Client nc2) {
+		Customer c1 = client_Service.getClient(1);
+		Customer c2 = new Customer(nc2);
+		c1.setName(c2.getName());
+		c1.setSurname(c2.getSurname());
+		c1.setDirection(c2.getDirection());
+		c1.setPhone(c2.getPhone());
+		c1.setPassword(c2.getPassword());
+		client_Service.updateUser(id, c1);
+		return new ResponseEntity<>(c1, HttpStatus.OK);
+	}
 
 	@GetMapping("/cart")
 	public String cart(@CookieValue(name = "sessionid", required = false) String sessionid, Model model) {
@@ -98,7 +102,8 @@ public class Main_Controller {
 
 	@PostMapping("/cart")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Map<Product, Integer>> createProduct(@CookieValue(name = "sessionid", required = false) String sessionid, @RequestBody List<String> pet) {
+	public ResponseEntity<Map<Product, Integer>> createProduct(
+			@CookieValue(name = "sessionid", required = false) String sessionid, @RequestBody List<String> pet) {
 		if (sessionid != null) {
 			int uds = Integer.parseInt(pet.get(1));
 			long id = Long.parseLong(pet.get(0));
@@ -106,7 +111,7 @@ public class Main_Controller {
 			product_Service.reduceStock(id, uds);
 			client_Service.addToCart(1, p1, uds);
 			return new ResponseEntity<>(client_Service.getallCart(1), HttpStatus.OK);
-		}else{
+		} else {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 		}
 

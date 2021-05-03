@@ -72,13 +72,10 @@ public class Client_Service {
         return l1;
     }
      //Falta el updat
-     /*
+     
     public void updateUser(long id, Customer c1){
-        Customer c  = (Customer)eManager.createQuery("SELECT c FROM Customer c WHERE id = '"+ id +"'").getSingleResult();
-        String query = "";
-        
-
-    }*/
+        client_Repository.saveAndFlush(c1);
+    }
     public Customer deleteClient(long id){
         Customer c = client_Repository.getOne(id);
         client_Repository.delete(c);
