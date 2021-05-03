@@ -45,7 +45,7 @@ public class Review {
         return product.getName();
     }
     public long getProductId(){
-        return product.getidProduct();
+        return product.getIdProduct();
     }
 
     public void setMessage(String message) {

@@ -22,7 +22,7 @@ public class Product_Service {
         Map <Long, Product> n1 = new ConcurrentHashMap<>();
         List<Product> q1 = product_Repository.findAll();
         for(Product p1 : q1){
-            n1.put(p1.getidProduct(), p1);
+            n1.put(p1.getIdProduct(), p1);
         }
         return n1;
     }
@@ -69,8 +69,9 @@ public class Product_Service {
     public void reduceStock(long id, int s){
         Product p1 = product_Repository.getOne(id);
         p1.setStock(p1.getStock() - s);
+        product_Repository.saveAndFlush(p1);
     }
-    @Transactional
+
     public Product deleteProduct(long id){
         Product p1 = product_Repository.getOne(id);
         product_Repository.delete(p1);

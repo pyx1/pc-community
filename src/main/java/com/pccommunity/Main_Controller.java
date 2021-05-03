@@ -87,6 +87,9 @@ public class Main_Controller {
 
 	@GetMapping("/cart")
 	public String cart(Model model) {
+		for(Product p : client_Service.getallCart(1).keySet()){
+			System.out.println(p.getIdProduct());
+		}
 		model.addAttribute("carrito", client_Service.getallCart(1).keySet());
 		model.addAttribute("unidades", client_Service.getallCart(1).values());
 		return "cart";
@@ -99,8 +102,8 @@ public class Main_Controller {
 		int uds = Integer.parseInt(pet.get(1));
 		long id = Long.parseLong(pet.get(0));
 		Product p1 = product_Service.getProduct(id);
+		product_Service.reduceStock(id, uds);
 		client_Service.addToCart(1, p1, uds);
-		p1.setStock(p1.getStock() - uds);
 		return new ResponseEntity<>(client_Service.getallCart(1), HttpStatus.OK);
 
 	}

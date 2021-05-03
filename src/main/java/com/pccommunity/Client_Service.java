@@ -19,6 +19,8 @@ public class Client_Service {
 
     @Autowired
     private Client_Repository client_Repository;
+    @Autowired
+    private Product_Repository product_Repository;
     private Map<Customer, Map<Product, Integer>> lclients = new ConcurrentHashMap<>();
 
     public Boolean loginClient(String email, String pass){
@@ -94,8 +96,8 @@ public class Client_Service {
             System.out.println("Cliente : " + c);
             if(c.equalsId(idCustomer)){
                 System.out.println("Añadiendo a carrito");
+                
                 lclients.get(c).put(p1, n);
-                System.out.println(lclients.get(c));
             }
         }
         
@@ -122,7 +124,9 @@ public class Client_Service {
         for(Customer c : lclients.keySet()){
             if(c.equalsId(idCustomer)){
                 Map<Product, Integer> nc = lclients.get(c);
-                nc.remove(p1);
+                for(Product ph : nc.keySet()){
+                    if(p1.equalsId(ph)) nc.remove(ph);
+                }
             }
         }
     }

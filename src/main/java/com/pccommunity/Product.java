@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+
 @Entity
 public class Product {
     
@@ -48,7 +49,7 @@ public class Product {
     public void setCategory(String category){
         this.category = category;
     }
-    public void setidProduct(long idProduct) {
+    public void setIdProduct(long idProduct) {
         this.idProduct = idProduct;
     }
 
@@ -82,7 +83,7 @@ public class Product {
         return category;
     }
 
-    public long getidProduct() {
+    public long getIdProduct() {
         return idProduct;
     }
 
@@ -130,7 +131,10 @@ public class Product {
     public void setBannerSource3(String bannerSource3) {
         this.bannerSource3 = bannerSource3;
     }
+    public boolean equalsId(Product p){
+        return this.idProduct == p.getIdProduct();
 
+    }
     @Override
     public String toString() {
         return "Product{" +
@@ -146,10 +150,9 @@ public class Product {
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
         Product producto = (Product) object;
-        System.out.println(idProduct + " " + producto.idProduct);
-        return idProduct == producto.idProduct;
+        System.out.println(idProduct + " " + producto.getIdProduct());
+        return idProduct == producto.getIdProduct();
     }
     @Override
     public int hashCode() {
