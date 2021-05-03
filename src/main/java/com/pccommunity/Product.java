@@ -1,5 +1,7 @@
 package com.pccommunity;
 
+import java.util.Set;
+
 import javax.persistence.*;
 
 @Entity
@@ -19,6 +21,8 @@ public class Product {
     private String category;
     private int starsAverage = 0;
     private String highlighted = "";
+    @OneToMany(mappedBy = "product")
+    private Set<Review> reviews;
 
 
     public Product() {

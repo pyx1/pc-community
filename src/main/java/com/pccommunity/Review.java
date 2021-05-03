@@ -1,12 +1,21 @@
 package com.pccommunity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
+@Entity
 public class Review {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idReview;
     private int stars; //Las estrellas
     private String message;
-    private String clientName;
+    @ManyToOne
     private Customer client = new Customer();
+    @ManyToOne
     private Product product = new Product();
 
     public Review() {
@@ -43,9 +52,11 @@ public class Review {
         this.message = message;
     }
 
-    public void assingClient(Customer c1){
+    public void setClient(Customer c1){
         this.client = c1;
-        this.clientName = c1.getName();
+    }
+    public String getClient(Customer c1){
+        return this.client.getName();
     }
 
     public Customer takeClient(){

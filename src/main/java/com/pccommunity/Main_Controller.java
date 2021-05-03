@@ -107,7 +107,7 @@ public class Main_Controller {
 	@DeleteMapping("/cart")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public ResponseEntity<Map<Product,Integer>> deleteProduct(@RequestBody Long id){
-		Product p1 = (Product)eManager.createQuery("SELECT c FROM Product WHERE id = '"+ id +"'"); ;
+		Product p1 = product_Service.getProduct(id);
 		client_Service.deleteProduct(1, p1);
 		return new ResponseEntity<>(client_Service.getallCart(1), HttpStatus.OK);
 
@@ -134,13 +134,13 @@ public class Main_Controller {
 		}
 		
 	}
-	/*@PostMapping("/producto/{id}")
+	@PostMapping("/producto/{id}")
 	public ResponseEntity<Review> newProductoReview(Model model, @PathVariable long id, @RequestBody Review r1) {
 		Product p1 = product_Service.getProduct(id);
-		review_Service.addReview(r1, client_Service.getFirstClient(), p1);
+		review_Service.addReview(r1, client_Service.getClient(1), p1);
 		p1.adjustStars(review_Service.starsAverage(p1));
 		return new ResponseEntity<>(r1, HttpStatus.OK);
-	}*/
+	}
 	
 	@GetMapping("/login")
 	public String login(Model model) {

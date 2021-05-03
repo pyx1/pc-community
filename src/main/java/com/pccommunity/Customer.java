@@ -27,6 +27,9 @@ public class Customer{
     @OneToMany(mappedBy = "client")
     private Set<Order> orders;
 
+    @OneToMany(mappedBy="client")
+    private Set<Review> reviews;
+
     public Customer() {
     }
     public Customer(New_Client nc){

@@ -1,7 +1,6 @@
 package com.pccommunity;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
