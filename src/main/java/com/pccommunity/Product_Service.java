@@ -41,9 +41,11 @@ public class Product_Service {
     }
 
     public boolean addHighlighted(long id){
+        Product p1 = product_Repository.getOne(id);
         if(highlighted.size() < 3){
-            highlighted.add(product_Repository.getOne(id));
-            product_Repository.getOne(id).adjustHighlighted("Highlighted");
+            highlighted.add(p1);
+            p1.adjustHighlighted("Highlighted");
+            product_Repository.saveAndFlush(p1);
             return true;
         }else return false;
     }
@@ -53,8 +55,15 @@ public class Product_Service {
     }
 
     public void removeHighLight(long id){
-        highlighted.remove(getProduct(id)); 
-        getProduct(id).adjustHighlighted("");
+        Product p1 = getProduct(id);
+        highlighted.remove(p1); 
+        p1.adjustHighlighted("");
+        product_Repository.saveAndFlush(p1);
+    }
+
+    public void adjustStars(Product p1, int stars){
+        p1.adjustStars(stars);
+        product_Repository.saveAndFlush(p1);
     }
     @Transactional
     public void createProduct(Product p1){

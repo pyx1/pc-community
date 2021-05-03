@@ -33,6 +33,10 @@ public class Review {
         return stars;
     }
 
+    public String getClientName(){
+        return this.client.getName();
+    }
+
     public void setStars(int stars) {
         this.stars = stars;
     }
@@ -55,8 +59,8 @@ public class Review {
     public void setClient(Customer c1){
         this.client = c1;
     }
-    public String getClient(Customer c1){
-        return this.client.getName();
+    public Customer getClient(Customer c1){
+        return this.client;
     }
 
     public Customer takeClient(){

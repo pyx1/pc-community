@@ -141,7 +141,7 @@ public class Main_Controller {
 	public ResponseEntity<Review> newProductoReview(Model model, @PathVariable long id, @RequestBody Review r1) {
 		Product p1 = product_Service.getProduct(id);
 		review_Service.addReview(r1, client_Service.getClient(1), p1);
-		p1.adjustStars(review_Service.starsAverage(p1));
+		product_Service.adjustStars(p1, review_Service.starsAverage(p1));
 		return new ResponseEntity<>(r1, HttpStatus.OK);
 	}
 	

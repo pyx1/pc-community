@@ -1,7 +1,6 @@
 package com.pccommunity;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ public class Review_Service {
         long id = lastId.getAndIncrement();
         r1.setIdReview(id);
         r1.assingProduct(p1);
+        r1.setClient(c1);
         review_Repository.saveAndFlush(r1);
     }
     public Review getReview(long id){

@@ -87,7 +87,7 @@ public class Admin_Controller {
     }
     @DeleteMapping("/product/highlight/{id}")
     public String rhighlightProduct(@PathVariable long id){
-        //product_Service.removeHighLight(id);
+        product_Service.removeHighLight(id);
         return "redirect:/admin/";
     }
 
