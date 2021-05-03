@@ -2,14 +2,18 @@ package com.pccommunity;
 
 import java.util.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "tOrders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,13 +23,21 @@ public class Order {
     private String date;
     private String details;
     @ManyToOne
-    private Customer client; //By id
+    private Customer client; //By id 
 
-    @OneToMany(mappedBy = "productId")
-    private List<Order_Product> prods; //Map products and units
+    @OneToMany(mappedBy = "orderId")
+    private List<Order_Product> uds; //Map products and units 
 
 
     public Order() {
+    }
+    public Order(Order o) {
+        this.idOrder = o.idOrder;
+        this.paymentMethod = o.paymentMethod;
+        this.state = o.state;
+        this.date = o.date;
+        this.details = o.details;
+        this.uds = new ArrayList<>();
     }
 
     public Order(long idOrder, String paymentMethod, String state, String date) {
@@ -33,23 +45,14 @@ public class Order {
         this.paymentMethod = paymentMethod;
         this.state = state;
         this.date = date;
-        this.prods = new ArrayList<>();
+        this.uds = new ArrayList<>();
     }
 
-    public void addProducts(Map<Product, Integer> m1){
-        for(Product p : m1.keySet()){
-            Order_Product o1 = new Order_Product(p, this, m1.get(p));
-            prods.add(o1);
-        }
-        System.out.println(prods);
-    }
 
 
     public long getIdOrder() {
         return idOrder;
     }
-    
-
     public void setIdOrder(long idOrder) {
         this.idOrder = idOrder;
     }
@@ -87,20 +90,21 @@ public class Order {
 
     public int getTotalPrice(){
         int total = 0;
-        for(Order_Product p : prods){
+        for(Order_Product p : uds){
+            System.out.println(p + " " + p.getUds());
             total += Integer.parseInt(p.productId.getPrice()) * p.getUds(); 
         }
         return total;
     }
     public int getProductNumber() {
-        return prods.size();
+        return uds.size();
     }
 
     public long getIdClient(){
         return client.getIdCustomer();
     }
 
-    /* Methods with other names because of conflicts*/ 
+    /* Methods with other names because of conflicts */
 
     public Customer takeClient() {
         return client;
@@ -118,7 +122,7 @@ public class Order {
                 ", fecha='" + date + '\'' +
                 ", details='" + details + '\'' +
                 ", estado='" + state + '\'' +
-                ", carrito='" + prods + '\'' +
+                ", carrito='" + uds + '\'' +
                 '}';
     }
     @Override

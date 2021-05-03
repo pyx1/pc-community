@@ -2,6 +2,10 @@ package com.pccommunity;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
+
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,17 +16,27 @@ public class Orders_Service {
 
     @Autowired
     private Order_Repository order_Repository;
+    @Autowired
+    private Order_Product_Repository opr_Repository;
     private AtomicLong lastId = new AtomicLong();
 
     public Order addOrder(Order o1, Map<Product, Integer> m1){
         long id = lastId.getAndIncrement();
         o1.setIdOrder(id);
-        o1.addProducts(m1);
-        //order_Repository.saveAndFlush(o1);
+        order_Repository.saveAndFlush(o1);
+        addProducts(m1, o1);
+        order_Repository.saveAndFlush(o1);
         return o1;
     }
     public void assingClient(Order o1, Customer client){
         o1.assingClient(client);
+    }
+    @Transactional
+    public void addProducts(Map<Product, Integer> m1, Order o){
+        for(Product p : m1.keySet()){
+            Order_Product o1 = new Order_Product(p, o, m1.get(p));
+            opr_Repository.save(o1);
+        }
     }
 
     public Collection<Order> getOrdersByClient(Customer c1){

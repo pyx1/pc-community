@@ -1,5 +1,6 @@
 package com.pccommunity;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -15,13 +16,9 @@ public class Order_Product {
     private long idProductOrder;
 
     @ManyToOne
-    @MapsId("productId")
-    @JoinColumn(name="idProduct")
     Product productId;
 
     @ManyToOne
-    @MapsId("orderId")
-    @JoinColumn(name="idOrder")
     Order orderId;
 
     int uds;

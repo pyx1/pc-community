@@ -24,7 +24,7 @@ public class Customer{
     private String password;
     private String direction;
 
-    @OneToMany(mappedBy = "client")
+    @OneToMany
     private Set<Order> orders;
 
     @OneToMany(mappedBy="client")
