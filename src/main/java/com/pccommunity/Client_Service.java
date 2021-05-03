@@ -22,23 +22,26 @@ public class Client_Service {
     @Autowired
     private Product_Repository product_Repository;
     private Map<Customer, Map<Product, Integer>> lclients = new ConcurrentHashMap<>();
+    private Map<String, Customer> sessions = new ConcurrentHashMap<>();
 
-    public Boolean loginClient(String email, String pass){
+    public String loginClient(String email, String pass){
         try{
             Customer c = client_Repository.findByEmail(email);
             if(c.getPassword().equals(pass)){
+                String token = generateBase64(c.getEmail(), c.getIdCustomer());
+                sessions.put(token, c);
                 lclients.put(c, new ConcurrentHashMap<>());
-                return true;
+                return token;
             }
-            else return false;
+            else return null;
         }
         catch(Exception e){
             System.out.println(e);
             if(e instanceof NoResultException){
                 System.out.println("[!]No existe el usuario");
-                return false;
+                return "UserNotFound";
             }
-            else return false; 
+            else return null; 
         }
     }
     @Transactional
@@ -149,6 +152,13 @@ public class Client_Service {
             }
         }
         return 0;
+    }
+
+    
+
+    public String generateBase64(String email, long id){
+        String str =  "{id:"+ id +"email:" + email +"}"; 
+        return Base64.getEncoder().encodeToString(str.getBytes());
     }
 
     

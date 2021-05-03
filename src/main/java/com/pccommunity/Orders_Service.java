@@ -18,7 +18,6 @@ public class Orders_Service {
     private Order_Repository order_Repository;
     @Autowired
     private Order_Product_Repository opr_Repository;
-    private AtomicLong lastId = new AtomicLong();
 
     public Order addOrder(Order o1, Map<Product, Integer> m1){
         order_Repository.saveAndFlush(o1);

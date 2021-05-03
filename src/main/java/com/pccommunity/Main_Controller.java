@@ -4,6 +4,8 @@ package com.pccommunity;
 import java.util.*;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 /* Imports */
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,9 +42,15 @@ public class Main_Controller {
 	
 	
 	@GetMapping("/")
-	public String index(Model model){
-		model.addAttribute("highlight", product_Service.getHighlighted());
-		return "index";
+	public String index(@CookieValue(name = "sessionid", required=false) String sessionid,Model model){
+		if(sessionid != null){
+			model.addAttribute("highlight", product_Service.getHighlighted());
+			return "index";
+		}
+		else{
+			return "redirect:/login/";
+		} 
+		
 	}
 	@GetMapping("/catalogo")
 	public String catalogo(Model model) {
@@ -146,14 +155,33 @@ public class Main_Controller {
 	}
 	
 	@GetMapping("/login")
-	public String login(Model model) {
-		return "login";
+	public String login(@CookieValue(name = "sessionid", required=false) String sessionid,Model model) {
+		if(sessionid == null){
+			return "login";
+		}
+		else{
+			return "redirect:/";
+		}
 	}
 	@PostMapping("/login") //It should return the session cookie, but thats for the future
     @ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Boolean> loginUser(@RequestBody List<String> data){
-        return new ResponseEntity<>(client_Service.loginClient(data.get(0), data.get(1)), HttpStatus.OK);
+	public String loginUser(@RequestBody List<String> data, HttpServletResponse response){
+		String consul = client_Service.loginClient(data.get(0), data.get(1));
+		if(consul == null){
+			throw new ResponseStatusException(HttpStatus.valueOf(500));
+		}
+		else if(consul.equals("UserNotFound")) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+		else{
+			Cookie sescookie = new Cookie("sessionid", consul);
+			sescookie.setPath("/");
+			response.addCookie(sescookie);
+			return "redirect:/";
+		}
     }
+	/*@PostMapping("/logout") //It should return the session cookie, but thats for the future
+	public ResponseEntity<Boolean> logoutUser(@RequestBody List<String> data){
+        return new ResponseEntity<>(client_Service.loginClient(data.get(0), data.get(1)), HttpStatus.OK);
+    }*/
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Customer> registerUser(@RequestBody New_Client c1){

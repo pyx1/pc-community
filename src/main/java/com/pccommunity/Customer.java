@@ -24,7 +24,7 @@ public class Customer{
     private String password;
     private String direction;
 
-    @OneToMany
+    @OneToMany(mappedBy = "client")
     private Set<Order> orders;
 
     @OneToMany(mappedBy="client")
@@ -115,6 +115,14 @@ public class Customer{
 
     public String getDirection() {
         return direction;
+    }
+
+    public int getOrdersNumber(){
+        return this.orders.size();
+    }
+
+    public int getReviewsNumber(){
+        return this.reviews.size();
     }
 
     public boolean equalsId(long id){

@@ -66,7 +66,6 @@ function throwAction() {
 	else if (atrb == 'register') {
 		register();
 	}
-
 }
 
 function register() {
@@ -87,7 +86,7 @@ function register() {
 			var client = new XMLHttpRequest();
 			client.responseType = "json";
 			client.addEventListener('load', function () {
-				location.reload();
+				
 			});
 			client.open("POST", "/register");
 			client.setRequestHeader("Content-type", "application/json");
@@ -109,17 +108,13 @@ function login() {
 
 	var r = document.getElementById('login').children;
 	var item =[r[0].value, r[1].value];
-
 	var client = new XMLHttpRequest();
-	client.responseType = "json";
-	client.addEventListener('load', function (response) {
-		alert(response.target['response']);
-		location.reload();
+	client.addEventListener("load", (response) => {
+		window.location.reload();
 	});
 	client.open("POST", "/login");
 	client.setRequestHeader("Content-type", "application/json");
 	var body = JSON.stringify(item);
 	client.send(body);
-	
 
 }
