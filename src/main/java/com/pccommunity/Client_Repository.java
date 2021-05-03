@@ -1,6 +1,5 @@
 package com.pccommunity;
 
-import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
