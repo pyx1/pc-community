@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Customer{
@@ -22,6 +23,9 @@ public class Customer{
     private String phone;
     private String password;
     private String direction;
+
+    @OneToMany(mappedBy = "client")
+    private Set<Order> orders;
 
     public Customer() {
     }

@@ -91,8 +91,11 @@ public class Client_Service {
 
     public void addToCart(long idCustomer, Product p1, int n){
         for(Customer c : lclients.keySet()){
+            System.out.println("Cliente : " + c);
             if(c.equalsId(idCustomer)){
+                System.out.println("Añadiendo a carrito");
                 lclients.get(c).put(p1, n);
+                System.out.println(lclients.get(c));
             }
         }
         
@@ -131,7 +134,7 @@ public class Client_Service {
                 return nc;
             }
         }
-        return null;
+        return new ConcurrentHashMap<>();
     }
 
     public int getCartProdNumber(long idCustomer, Product p1){
