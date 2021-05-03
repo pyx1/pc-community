@@ -2,11 +2,8 @@ package com.pccommunity;
 
 import java.util.*;
 
-import javax.persistence.Query;
 import javax.transaction.Transactional;
-import javax.persistence.EntityManager;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -87,7 +84,7 @@ public class Admin_Controller {
     }
     @DeleteMapping("/product/highlight/{id}")
     public String rhighlightProduct(@PathVariable long id){
-        //product_Service.removeHighLight(id);
+        product_Service.removeHighLight(id);
         return "redirect:/admin/";
     }
 

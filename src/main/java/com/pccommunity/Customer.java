@@ -1,18 +1,12 @@
 package com.pccommunity;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-
-@NamedQueries({
-    @NamedQuery(name = "Customer.getByEmail", query = "SELECT c FROM Customer c WHERE email = :email"),
-})
+import javax.persistence.OneToMany;
 
 @Entity
 public class Customer{
@@ -26,6 +20,12 @@ public class Customer{
     private String phone;
     private String password;
     private String direction;
+
+    @OneToMany(mappedBy = "client")
+    private Set<Order> orders;
+
+    @OneToMany(mappedBy="client")
+    private Set<Review> reviews;
 
     public Customer() {
     }
@@ -112,6 +112,14 @@ public class Customer{
 
     public String getDirection() {
         return direction;
+    }
+
+    public int getOrdersNumber(){
+        return this.orders.size();
+    }
+
+    public int getReviewsNumber(){
+        return this.reviews.size();
     }
 
     public boolean equalsId(long id){

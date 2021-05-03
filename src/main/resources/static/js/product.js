@@ -10,10 +10,13 @@ function updatecart(id){
     var uds = document.getElementById("units").value;
     var client = new XMLHttpRequest();
     client.responseType = "json";
-    client.addEventListener("load", function(){
-        console.log(this.response);
-        setcartspan();
-        location.reload();
+    client.addEventListener("load", function(response){
+        if(response.target.status == 401) alert("No se pudo añadir. Logueate por favor");
+        else{
+            setcartspan();
+            location.reload();
+        }
+        
     });
     var item = [idProducto.toString(), uds];
     var body = JSON.stringify(item);

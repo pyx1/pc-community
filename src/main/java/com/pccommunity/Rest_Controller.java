@@ -1,11 +1,15 @@
-/*
+
 package com.pccommunity;
 
 import java.util.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,46 +60,46 @@ public class Rest_Controller {
 
     @PostMapping("/products/{id}") //Adding item by id to cart and returning products in cart, not units
     public Collection<Product> addToCartAPI(@PathVariable long id){
-        client_Service.getFirstClient().addToCart(product_Service.getProduct(id), 1);
-        return client_Service.getFirstClient().getallCart().keySet();
+        client_Service.addToCart(1, product_Service.getProduct(id), 1); //First client id
+        return client_Service.getallCart(1).keySet();
     }
     @GetMapping("/products/{id}/units") //Getting units from product in cart
     public ResponseEntity<Integer> howManyAPI(@PathVariable long id){
-        return new ResponseEntity<>(client_Service.getFirstClient().getCartProdNumber(product_Service.getProduct(id)), HttpStatus.OK);
+        return new ResponseEntity<>(client_Service.getCartProdNumber(1, product_Service.getProduct(id)), HttpStatus.OK);
     }
 
     @GetMapping("/orders") //Getting orders from a client as client view
     public Collection<Order> getOrdersFromClientAPI(){
-        return orders_Service.getOrdersByClient(client_Service.getFirstClient());
+        return orders_Service.getOrdersByClient(client_Service.getClient(1));
     }
 
     @GetMapping("/reviews") //Getting reviews from a client
     public Collection<Review> getReviewsFromClientAPI(){
-        return review_Service.getReviewsFromClient(client_Service.getFirstClient());
+        return review_Service.getReviewsFromClient(client_Service.getClient(1));
     }
 
     @GetMapping("/cart") //Getting clients current cart
     public Map<Product, Integer> getCartProductsAPI(){
-        return client_Service.getFirstClient().getallCart();
+        return client_Service.getallCart(1);
     }
 
 	@GetMapping("/cart/items")
 	public ResponseEntity<Collection<Product>> cartitemsAPI() {
-		return new ResponseEntity<>(client_Service.getFirstClient().getallCart().keySet(), HttpStatus.OK);
+		return new ResponseEntity<>(client_Service.getallCart(1).keySet(), HttpStatus.OK);
 	}
     @GetMapping("/cart/{id}")
     public ResponseEntity<Integer> getCartNumberAPI(@PathVariable long id){
-        return new ResponseEntity<>(client_Service.getFirstClient().getCartProdNumber(product_Service.getProduct(id)), HttpStatus.OK);
+        return new ResponseEntity<>(client_Service.getCartProdNumber(1, product_Service.getProduct(id)), HttpStatus.OK);
     }
     @PostMapping("/cart/{id}") //Update cart in one
     public Map<Product, Integer> updateCartNumberAPI(@PathVariable long id){
-        client_Service.getFirstClient().updateCartinOne(product_Service.getProduct(id));
-        return client_Service.getFirstClient().getallCart();
+        client_Service.updateCartinOne(1, product_Service.getProduct(id));
+        return client_Service.getallCart(1);
     } 
     @DeleteMapping("/cart/{id}") //Delete product from cart
     public Map<Product, Integer> deleteCartProdAPI(@PathVariable long id){
-        client_Service.getFirstClient().deleteProduct(product_Service.getProduct(id));
-        return client_Service.getFirstClient().getallCart();
+        client_Service.deleteProduct(1, product_Service.getProduct(id));
+        return client_Service.getallCart(1);
     } 
 
     @PostMapping("/register") //Register endpoint
@@ -106,12 +110,27 @@ public class Rest_Controller {
 
     }
     @PostMapping("/login") //It should return the session cookie, but thats for the future
-    public Boolean loginNewClientAPI(@RequestBody List<String> data){
-        return client_Service.loginClient(data.get(0), data.get(1));
+    public String loginNewClientAPI(@RequestBody List<String> data,  HttpServletResponse response){
+        String consul = client_Service.loginClient(data.get(0), data.get(1));
+        Cookie sescookie = new Cookie("sessionid", consul);
+		sescookie.setPath("/");
+		sescookie.setSecure(true);
+		response.addCookie(sescookie);
+        return consul;
     }
+    @PostMapping("/logout")
+	public String logoutUser(@CookieValue(name = "sessionid", required = false) String sessionid, HttpServletResponse response) {
+		if (sessionid != null) {
+			Cookie sescookie = new Cookie("sessionid", "");
+			sescookie.setMaxAge(0);
+			sescookie.setPath("/");
+			sescookie.setSecure(true);
+			response.addCookie(sescookie);
+		}
+		return null;
+	}
 
     /* Admin Section */
-    /*
     @PostMapping("/admin/product")
     public ResponseEntity<Product> registerNewProductAPI(@RequestBody Product p1){
         product_Service.createProduct(p1);
@@ -169,4 +188,4 @@ public class Rest_Controller {
         return new ResponseEntity<>(orders_Service.updateOrder(id), HttpStatus.OK);
     }
     
-}*/
+}

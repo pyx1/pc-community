@@ -1,47 +1,53 @@
 package com.pccommunity;
+import javax.transaction.Transactional;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.*;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class Orders_Service {
-    private Map<Long, Order> allOrders = new ConcurrentHashMap<>();
-    private AtomicLong lastId = new AtomicLong();
+
+    @Autowired
+    private Order_Repository order_Repository;
+    @Autowired
+    private Order_Product_Repository opr_Repository;
 
     public Order addOrder(Order o1, Map<Product, Integer> m1){
-        long id = lastId.getAndIncrement();
-        o1.setIdOrder(id);
-        o1.addProducts(new ConcurrentHashMap<>(m1));
-        allOrders.put(id, o1);
+        order_Repository.saveAndFlush(o1);
+        addProducts(m1, o1);
+        order_Repository.saveAndFlush(o1);
         return o1;
     }
     public void assingClient(Order o1, Customer client){
         o1.assingClient(client);
     }
+    @Transactional
+    public void addProducts(Map<Product, Integer> m1, Order o){
+        for(Product p : m1.keySet()){
+            Order_Product o1 = new Order_Product(p, o, m1.get(p));
+            opr_Repository.save(o1);
+        }
+    }
 
     public Collection<Order> getOrdersByClient(Customer c1){
-       List<Order> orders = new ArrayList<Order>();
-        for(Order o1 : allOrders.values()){
-           if(o1.takeClient().equals(c1)) orders.add(o1);
-       }
-        return orders;
+        return order_Repository.findByClient(c1);
     }
 
     public Order updateOrder(long id){
-        Order o1 = allOrders.get(id);
+        Order o1 = order_Repository.getOne(id);
         o1.setState("Sent");
+        order_Repository.save(o1);
         return o1;
     }
 
     public Collection<Order> gettallOrders(){
-        return allOrders.values();
+        return order_Repository.findAll();
     }
 
     public Order getOrderById(long id){
-        return allOrders.get(id);
+        return order_Repository.getOne(id);
     }
 
 }
