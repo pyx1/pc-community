@@ -118,7 +118,6 @@ public class Main_Controller {
 	@PostMapping("/complete")
 	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<Order> completeOrder(@RequestBody Order order1){
-		order1 = new Order(order1);
 		orders_Service.assingClient(order1, client_Service.getLoggedClient(1));
 		orders_Service.addOrder(order1, client_Service.getallCart(1));
 		client_Service.cleanCart(1);

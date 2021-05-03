@@ -21,8 +21,6 @@ public class Orders_Service {
     private AtomicLong lastId = new AtomicLong();
 
     public Order addOrder(Order o1, Map<Product, Integer> m1){
-        long id = lastId.getAndIncrement();
-        o1.setIdOrder(id);
         order_Repository.saveAndFlush(o1);
         addProducts(m1, o1);
         order_Repository.saveAndFlush(o1);

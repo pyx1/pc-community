@@ -31,14 +31,6 @@ public class Order {
 
     public Order() {
     }
-    public Order(Order o) {
-        this.idOrder = o.idOrder;
-        this.paymentMethod = o.paymentMethod;
-        this.state = o.state;
-        this.date = o.date;
-        this.details = o.details;
-        this.uds = new ArrayList<>();
-    }
 
     public Order(long idOrder, String paymentMethod, String state, String date) {
         this.idOrder = idOrder;
