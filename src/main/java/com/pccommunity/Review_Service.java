@@ -11,11 +11,8 @@ public class Review_Service {
     
     @Autowired
     private Review_Repository review_Repository;
-    private AtomicLong lastId = new AtomicLong();
 
     public void addReview(Review r1, Customer c1, Product p1){
-        long id = lastId.getAndIncrement();
-        r1.setIdReview(id);
         r1.assingProduct(p1);
         r1.setClient(c1);
         review_Repository.saveAndFlush(r1);
