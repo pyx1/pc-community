@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Customer{
 
@@ -21,9 +23,10 @@ public class Customer{
     private String password;
     private String direction;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "client")
     private Set<Order> orders;
-
+    @JsonIgnore
     @OneToMany(mappedBy="client")
     private Set<Review> reviews;
 
@@ -113,11 +116,11 @@ public class Customer{
     public String getDirection() {
         return direction;
     }
-
+    @JsonIgnore
     public int getOrdersNumber(){
         return this.orders.size();
     }
-
+    @JsonIgnore
     public int getReviewsNumber(){
         return this.reviews.size();
     }

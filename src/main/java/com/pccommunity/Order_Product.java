@@ -1,22 +1,23 @@
 package com.pccommunity;
 
+import java.io.Serializable;
+
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.ManyToOne;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 
-@Entity
-public class Order_Product {
+
+
+@Entity @IdClass(OrderProductPK.class)
+public class Order_Product implements Serializable{
+    
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idProductOrder;
-
     @ManyToOne
     Product productId;
-
+    @Id
     @ManyToOne
     Order orderId;
 
@@ -31,27 +32,22 @@ public class Order_Product {
         this.uds = uds;
     }
 
-    public long getIdProductOrder() {
-        return idProductOrder;
-    }
-
-    public void setIdProductOrder(long idProductOrder) {
-        this.idProductOrder = idProductOrder;
-    }
-
-    public Product getProduct() {
+    @JsonIgnore
+    public Product getProductId() {
         return productId;
     }
-
-    public void setProduct(Product p) {
+    public String getProductName(){
+        return productId.getName();
+    }
+    public void setProductId(Product p) {
         this.productId = p;
     }
     @JsonIgnore
-    public Order getOrder() {
+    public Order getOrderId() {
         return orderId;
     }
 
-    public void setOrder(Order order) {
+    public void setOrderId(Order order) {
         this.orderId = order;
     }
 
