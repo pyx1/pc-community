@@ -2,6 +2,9 @@ package com.pccommunity;
 
 import java.io.Serializable;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class OrderProductPK implements Serializable{
 
     Long productId;
@@ -14,6 +17,30 @@ public class OrderProductPK implements Serializable{
         super();
         this.productId = productId.getIdProduct();
         this.orderId = orderId.getIdOrder();
+    }
+
+    /*public void setProductId(Long p){
+        this.productId = p;
+
+    }*/
+    public void setProductId(Product p){
+        this.productId = p.getIdProduct();
+
+    }
+
+    public Long getProductId(){
+        return productId;
+    }
+
+    /*public void setOrderId(Long o){
+        this.orderId = o;
+    }*/
+    public void setOrderId(Order o){
+        this.orderId = o.getIdOrder();
+    }
+
+    public Long getOrderId(){
+        return this.orderId;
     }
     @Override
     public boolean equals(Object object) {

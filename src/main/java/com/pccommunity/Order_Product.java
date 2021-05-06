@@ -2,7 +2,9 @@ package com.pccommunity;
 
 import java.io.Serializable;
 
-
+import javax.persistence.AttributeOverride;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
@@ -11,13 +13,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 
-@Entity @IdClass(OrderProductPK.class)
+@Entity 
 public class Order_Product implements Serializable{
-    
-    @Id
+
+    @EmbeddedId OrderProductPK idOP;
+
     @ManyToOne
     Product productId;
-    @Id
+
     @ManyToOne
     Order orderId;
 
@@ -30,7 +33,18 @@ public class Order_Product implements Serializable{
         this.productId = p;
         this.orderId = order;
         this.uds = uds;
+        this.idOP = new OrderProductPK(this.productId, this.orderId);
     }
+
+    public void setIdOP(OrderProductPK pk){
+        System.out.println("Aqui 1");
+        this.idOP = pk;
+    }
+
+    public OrderProductPK getIdOP(){
+        return idOP;
+    }
+
 
     @JsonIgnore
     public Product getProductId() {
