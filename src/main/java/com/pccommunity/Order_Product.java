@@ -2,22 +2,19 @@ package com.pccommunity;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Index;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 
 @Entity @IdClass(OrderProductPK.class)
-@Table(indexes = {@Index(columnList = "order_id_id_order", unique = false),
+@Table(indexes = {@Index(columnList = "order_id_id_order", unique = false), 
 @Index(columnList = "product_id_id_product", unique = false)})
 public class Order_Product implements Serializable{
     

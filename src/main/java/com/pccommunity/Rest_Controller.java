@@ -44,10 +44,16 @@ public class Rest_Controller {
         return new ResponseEntity<>(product_Service.getProduct(id), HttpStatus.OK);
     }
 
-    @GetMapping("/products/search/{filter}") //Search products
-    public ResponseEntity<List<Product>> searchProduct(@PathVariable String filter){
-        return new ResponseEntity<>(product_Service.searchProduct(filter), HttpStatus.OK);
+    @PostMapping("/products/search") //Search products
+    public ResponseEntity<List<Product>> searchProduct(@RequestBody Map<String,Object> m1){
+        String filter = m1.get("name").toString();
+		int maxP = Integer.parseInt(m1.get("max").toString());
+		int minP = Integer.parseInt(m1.get("min").toString());
+		List<Product> l1 = product_Service.searchProduct(filter, maxP, minP);
+		if(l1.size() > 0) return new ResponseEntity<>(l1, HttpStatus.OK);
+		else return new ResponseEntity<>(HttpStatus.OK);
     }
+
 
     @GetMapping("/products/{id}/reviews") //Reviews from product
     public Collection<Review> getProdRevsAPI(@PathVariable long id){

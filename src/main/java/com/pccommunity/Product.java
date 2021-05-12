@@ -13,7 +13,7 @@ public class Product {
     private String name;
     private String imageSource;
     private String description;
-    private String price;
+    private int price;
     private String bannerSource1;
     private String bannerSource2;
     private String bannerSource3;
@@ -36,7 +36,7 @@ public class Product {
         this.stock = p.stock;
     }
 
-    public Product(long id, String name, String description, String price, String category, int stock) {
+    public Product(long id, String name, String description, int price, String category, int stock) {
         this.idProduct = id;
         this.name=name;
         this.price=price;
@@ -64,7 +64,7 @@ public class Product {
         this.description = description;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -98,7 +98,7 @@ public class Product {
         return description;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 

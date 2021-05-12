@@ -18,8 +18,26 @@
             </button>
           </form>
         </div>
-        <div id="searchPlacer"class="" style=" max-height: 150px; overflow-y: auto;width: 80%; right:8%; background-color: white; position: absolute; border-radius: 12px;">
-         
+        <div class="" style="max-height: 150px; overflow-y: auto;width: 80%; right:8%; background-color: white; position: absolute; border-radius: 12px;">
+          <div id="searchPrices" class="row mt-1 ml-auto mr-auto hidden" style="width: 100%; border-bottom: 1px #000000 solid; padding-bottom: 2px;">
+            <div class="col-6">
+              <div class="row" style="justify-content: center; align-content: center;">
+              <p style="font-size: smaller; margin: 0; margin-right:2px; width: 20%;">Min</p>
+              <input onkeyup="search()" onchange="search()" class="price-limit" type="number" style="width: 60%;">
+              <p style="font-size: smaller; margin: 0; margin-left:2px; width: 10%;">€</p>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="row" style="justify-content: center; align-content: center;">
+              <p style="font-size: smaller; margin: 0; margin-right:2px; width: 20%;">Max</p>
+              <input onkeyup="search()" onchange="search()" class="price-limit" type="number" style="width: 60%;">
+              <p style="font-size: smaller; margin: 0; margin-left:2px; width: 10%;">€</p>
+              </div>
+            </div>
+          </div>
+          <div id="searchPlacer" class="col-12">
+
+          </div>
         </div>
       </div>
       <ul class="navbar-nav ml-auto">

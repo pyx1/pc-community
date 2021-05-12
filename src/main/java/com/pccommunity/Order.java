@@ -81,7 +81,7 @@ public class Order {
     public int getTotalPrice(){
         int total = 0;
         for(Order_Product p : uds){
-            total += Integer.parseInt(p.productId.getPrice()) * p.getUds(); 
+            total += p.productId.getPrice() * p.getUds(); 
         }
         return total;
     }

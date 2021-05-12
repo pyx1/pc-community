@@ -33,9 +33,12 @@ public class Product_Service {
         return l;
     }
 
-    public List<Product> searchProduct(String str){
-        List<Product> l = product_Repository.findByNameStartsWith(str);
-        return l;
+    public List<Product> searchProduct(String str, int maxP , int minP){
+        if(maxP == -1) maxP = Integer.MAX_VALUE;
+        if(minP == -1) minP = Integer.MIN_VALUE;
+        System.out.println(str + " " + maxP + " " + minP);
+        if(str != "")return product_Repository.findByNameStartsWithAndPriceBetween(str, minP, maxP);
+        else return new ArrayList<>();
     }
 
     public boolean addHighlighted(long id){
