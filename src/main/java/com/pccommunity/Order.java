@@ -24,7 +24,7 @@ public class Order {
     private Customer client; //By id 
 
     @OneToMany(mappedBy = "orderId")
-    private List<Order_Product> uds; //Map products and units 
+    private List<Order_Product> uds; //Map products and units
 
 
     public Order() {
