@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(){
 	changepath();
-    setcartspan();
+    if(!document.location.pathname.startsWith("/login"))setcartspan();
 })
 
 function createSElem(element){

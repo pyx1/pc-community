@@ -11,8 +11,14 @@
             <h3 class="mb-3">{{name}}</h3>
             <h5 class="mb-3">{{price}} €</h5>
             <h5 class="mb-3">{{category}}</h5>
+            {{#logged}}
             <button class="buy-button mb-4 mt-2" onclick="updatecart({{idProduct}})"><i class="bi bi-cart4 mr-2"></i>
               A&ntilde;adir al carrito</button>
+            {{/logged}}
+            {{^logged}}
+            <button class="buy-button mb-4 mt-2" disabled><i class="bi bi-cart4 mr-2"></i>
+              Logueate para comprar</button>
+            {{/logged}}
             <span style="font-size: 1.25rem;" class="noselect">Cantidad </span>
             <select class="mb-2 mt-2 ml-2" id="units" data-units="{{stock}}">
 
@@ -73,6 +79,7 @@
             </div>
             {{/reviews}}
             <!--Hasta aqui el comentario-->
+            {{#logged}}
             <span class="noselect">Deja tu valoracion</span>
             <div class="col-lg-8 mb-2">
               <div class="row mt-2 mb-1">
@@ -103,6 +110,7 @@
             </div>
 
           </div>
+          {{/logged}}
         </div>
       </div>
 

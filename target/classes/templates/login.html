@@ -1,8 +1,8 @@
 {{>headers}}
+
 <body style="background-color: rgba(254,159,31,0.8)">
-	<div class="container" >
+	<div class="container">
 		<div class="row align-items-center justify-content-center" style="height: 60vh;">
-			<form>
 				<div class="row mb-3 align-items-center justify-content-center">
 					<h2 id="title">Inicia sesi&oacute;n</h2>
 				</div>
@@ -16,31 +16,32 @@
 						<input type="password" placeholder="Repetir Contrase&ntilde;a" class="login-mid">
 						<input type="text" placeholder="Direccion" class="login-mid">
 						<input type="text" placeholder="Telefono" class="login-bot">
-						</div>
-					
-					<div id="login" class="col-md-12">
-						<input type="email" placeholder="Correo electronico" class="login-top">
-						<input type="password" placeholder="Contrase&ntilde;a" class="login-bot">
-						</div>
+						<input type="submit" class="login-button" data-lgn="register" onclick="register()" value="Registrar">
+							
 					</div>
+
+					<div id="login" class="col-md-12">
+						<form action="/login" method="POST">
+							<input type="email" name="email" placeholder="Correo electronico" class="login-top">
+							<input type="password" name="password" placeholder="Contrase&ntilde;a" class="login-bot">
+							<input type="submit" class="login-button" value="Entrar">
+						</form>
+					</div>
+				</div>
 				<div class="row mb-2 align-items-center justify-content-center">
 					<div class="col-md-12">
-					<button class="login-button" data-lgn="login" onclick="throwAction()">
-						<span id="button">Entrar</span>
-					</button>
+
 					</div>
 				</div>
 				<div class="row align-items-end- justify-content-end">
 					<div class="col-md-4">
-						<a id="change" href="">Registrate</a>
+						<a id="change" href="#">Registrate</a>
 					</div>
 				</div>
-			</form>
 		</div>
 	</div>
-	
-{{>scripts}}
-  <script src="/js/login.js"></script>
+
+	{{>scripts}}
+	<script src="/js/login.js"></script>
 
 </body>
-

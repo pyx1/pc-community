@@ -3,16 +3,15 @@ package com.pccommunity;
 import java.util.*;
 
 import javax.persistence.EntityManager;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 /* Imports */
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +27,9 @@ import org.springframework.web.server.ResponseStatusException;
 public class Main_Controller {
 
 	@Autowired
+	private Logged_Customer lCustomer;
+
+	@Autowired
 	private EntityManager eManager;
 	@Autowired
 	Product_Service product_Service;
@@ -39,14 +41,18 @@ public class Main_Controller {
 	Review_Service review_Service;
 
 	@GetMapping("/")
-	public String index(Model model) {
+	public String index(Model model, HttpServletRequest request) {
+		model.addAttribute("logged", request.isUserInRole("USER"));
+		model.addAttribute("admin", request.isUserInRole("ADMIN"));
 		model.addAttribute("highlight", product_Service.getHighlighted());
 		return "index";
 
 	}
 
 	@GetMapping("/catalogo")
-	public String catalogo(@CookieValue(name = "sessionid", required = false) String sessionid, Model model) {
+	public String catalogo(Model model, HttpServletRequest request) {
+		model.addAttribute("logged", request.isUserInRole("USER"));
+		model.addAttribute("admin", request.isUserInRole("ADMIN"));
 		model.addAttribute("productos", product_Service.getProducts().values());
 		return "catalogo";
 	}
@@ -62,8 +68,10 @@ public class Main_Controller {
 	}
 
 	@GetMapping("/catalogo/{categoria}")
-	public String filteredcatalog(Model model, @PathVariable String categoria) {
+	public String filteredcatalog(Model model, @PathVariable String categoria, HttpServletRequest request) {
 		if (categoria.equals("componentes") || categoria.equals("perifericos") || categoria.equals("monitores")) {
+			model.addAttribute("logged", request.isUserInRole("USER"));
+			model.addAttribute("admin", request.isUserInRole("ADMIN"));
 			model.addAttribute("productos", product_Service.getProductsFiltered(categoria));
 			return "catalogo";
 		} else {
@@ -73,19 +81,19 @@ public class Main_Controller {
 	}
 
 	@GetMapping("/profile")
-	public String profile(@CookieValue(name = "sessionid", required = false) String sessionid, Model model) {
-		if (sessionid != null) {
-			model.addAttribute("client", client_Service.getClient(1));
-			model.addAttribute("orders", orders_Service.getOrdersByClient(client_Service.getClient(1)));
-			model.addAttribute("reviews", review_Service.getReviewsFromClient(client_Service.getClient(1)));
-			return "profile";
-		} else
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+	public String profile(Model model, Authentication auth, HttpServletRequest request) {
+		model.addAttribute("logged", request.isUserInRole("USER"));
+		Customer client = client_Service.getClientByEmail(auth.getName());
+		model.addAttribute("client", client);
+		model.addAttribute("orders", orders_Service.getOrdersByClient(client));
+		model.addAttribute("reviews", review_Service.getReviewsFromClient(client));
+		model.addAttribute("admin", request.isUserInRole("ADMIN"));
+		return "profile";
 	}
 
 	@PutMapping("/profile/{id}")
-	public ResponseEntity<Customer> profileedit(Model model, @PathVariable long id, @RequestBody New_Client nc2) {
-		Customer c1 = client_Service.getClient(1);
+	public ResponseEntity<Customer> profileedit(Model model, @PathVariable long id, @RequestBody New_Client nc2, Authentication auth) {
+		Customer c1 = client_Service.getClientByEmail(auth.getName());
 		Customer c2 = new Customer(nc2);
 		c1.setName(c2.getName());
 		c1.setSurname(c2.getSurname());
@@ -97,59 +105,53 @@ public class Main_Controller {
 	}
 
 	@GetMapping("/cart")
-	public String cart(@CookieValue(name = "sessionid", required = false) String sessionid, Model model) {
-		model.addAttribute("carrito", client_Service.getallCart(1).keySet());
-		model.addAttribute("unidades", client_Service.getallCart(1).values());
+	public String cart(Model model, HttpServletRequest request) {
+		model.addAttribute("logged", request.isUserInRole("USER"));
+		model.addAttribute("carrito", lCustomer.getCart().keySet());
+		model.addAttribute("unidades", lCustomer.getCart().values());
+		model.addAttribute("admin", request.isUserInRole("ADMIN"));
 		return "cart";
 	}
 
 	@PostMapping("/cart")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Map<Product, Integer>> createProduct(
-			@CookieValue(name = "sessionid", required = false) String sessionid, @RequestBody List<String> pet) {
-		if (sessionid != null) {
+	public ResponseEntity<Map<Product, Integer>> createProduct(@RequestBody List<String> pet) {
 			int uds = Integer.parseInt(pet.get(1));
 			long id = Long.parseLong(pet.get(0));
 			Product p1 = product_Service.getProduct(id);
 			product_Service.reduceStock(id, uds);
-			client_Service.addToCart(1, p1, uds);
-			return new ResponseEntity<>(client_Service.getallCart(1), HttpStatus.OK);
-		} else {
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
-		}
-
+			lCustomer.addToCart(p1, uds);
+			return new ResponseEntity<>(lCustomer.getCart(), HttpStatus.OK);
 	}
 
 	@DeleteMapping("/cart")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public ResponseEntity<Map<Product, Integer>> deleteProduct(@RequestBody Long id) {
 		Product p1 = product_Service.getProduct(id);
-		product_Service.incrementStock(id, client_Service.getCartProdNumber(1, p1));
-		client_Service.deleteProduct(1, p1);
-		return new ResponseEntity<>(client_Service.getallCart(1), HttpStatus.OK);
+		product_Service.incrementStock(id, lCustomer.getCartProdNumber(p1));
+		lCustomer.deleteProduct(p1);
+		return new ResponseEntity<>(lCustomer.getCart(), HttpStatus.OK);
 
 	}
 
 	@PostMapping("/complete")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Order> completeOrder(@CookieValue(name = "sessionid", required = false) String sessionid,
-			@RequestBody Order order1) {
-		if (sessionid != null) {
-			orders_Service.assingClient(order1, client_Service.getLoggedClient(1));
-			orders_Service.addOrder(order1, client_Service.getallCart(1));
-			client_Service.cleanCart(1);
+	public ResponseEntity<Order> completeOrder(@RequestBody Order order1, Authentication auth) {
+			orders_Service.assingClient(order1, client_Service.getClientByEmail(auth.getName()));
+			orders_Service.addOrder(order1, lCustomer.getCart());
+			lCustomer.cleanCart();
 			return new ResponseEntity<>(order1, HttpStatus.OK);
-		} else
-			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 	}
 
 	@GetMapping("/producto/{id}")
-	public String product(Model model, @PathVariable long id) {
+	public String product(Model model, @PathVariable long id, HttpServletRequest request) {
 		if (eManager.find(Product.class, id) != null) {
 			Product producto = product_Service.getProduct(id);
 			model.addAttribute("producto", producto);
-			model.addAttribute("carrito", client_Service.getallCart(1).keySet());
+			model.addAttribute("carrito", lCustomer.getCart().keySet());
 			model.addAttribute("reviews", review_Service.getReviewsFromProduct(producto));
+			model.addAttribute("admin", request.isUserInRole("ADMIN"));
+			model.addAttribute("logged", request.isUserInRole("USER"));
 			return "product";
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -158,51 +160,19 @@ public class Main_Controller {
 	}
 
 	@PostMapping("/producto/{id}")
-	public ResponseEntity<Review> newProductoReview(Model model, @PathVariable long id, @RequestBody Review r1) {
+	public ResponseEntity<Review> newProductoReview(Model model, @PathVariable long id, @RequestBody Review r1, Authentication auth) {
 		Product p1 = product_Service.getProduct(id);
-		review_Service.addReview(r1, client_Service.getClient(1), p1);
+		Customer c1 = client_Service.getClientByEmail(auth.getName());
+		review_Service.addReview(r1, c1, p1);
 		product_Service.adjustStars(p1, review_Service.starsAverage(p1));
 		return new ResponseEntity<>(r1, HttpStatus.OK);
 	}
 
 	@GetMapping("/login")
-	public String login(@CookieValue(name = "sessionid", required = false) String sessionid, Model model) {
-		if (sessionid == null) {
-			return "login";
-		} else {
-			return "redirect:/";
-		}
+	public String login(Model model) {
+		return "login";
 	}
 
-	@PostMapping("/login") // It returns the session cookie, but thats for the future
-	@ResponseStatus(HttpStatus.CREATED)
-	public String loginUser(@RequestBody List<String> data, HttpServletResponse response) {
-		String consul = client_Service.loginClient(data.get(0), data.get(1));
-		if (consul == null) {
-			throw new ResponseStatusException(HttpStatus.valueOf(500));
-		} else if (consul.equals("UserNotFound"))
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-		else {
-			Cookie sescookie = new Cookie("sessionid", consul);
-			sescookie.setPath("/");
-			sescookie.setSecure(true);
-			response.addCookie(sescookie);
-			return "redirect:/";
-		}
-	}
-
-	@PostMapping("/logout")
-	public String logoutUser(@CookieValue(name = "sessionid", required = false) String sessionid,
-			HttpServletResponse response) {
-		if (sessionid != null) {
-			Cookie sescookie = new Cookie("sessionid", "");
-			sescookie.setMaxAge(0);
-			sescookie.setPath("/");
-			sescookie.setSecure(true);
-			response.addCookie(sescookie);
-		}
-		return "redirect:/login/";
-	}
 
 	@PostMapping("/register")
 	@ResponseStatus(HttpStatus.CREATED)

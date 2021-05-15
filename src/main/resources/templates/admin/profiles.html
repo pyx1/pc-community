@@ -1,47 +1,73 @@
 {{>headers}}
+
 <body>
     {{>admin/admin-navbar}}
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                
+
                 <div class="row my-2">
                     <div class="col-sm-1">
-                        <div class="row align-self-center justify-content-center"><h4>Id</h4></div>
+                        <div class="row align-self-center justify-content-center">
+                            <h4>Id</h4>
+                        </div>
                     </div>
                     <div class="col-sm-2">
-                        <div class="row align-self-center justify-content-center"><h4>Email</h4></div>
+                        <div class="row align-self-center justify-content-center">
+                            <h4>Email</h4>
+                        </div>
                     </div>
 
                     <div class="col-sm-3">
-                        <div class="row align-self-center justify-content-center"><h6>Numero de pedidos</h6></div>
+                        <div class="row align-self-center justify-content-center">
+                            <h6>Numero de pedidos</h6>
+                        </div>
                     </div>
                     <div class="col-sm-3">
-                        <div class="row align-self-center justify-content-center"><h6>Numero de valoraciones</h6></div>
+                        <div class="row align-self-center justify-content-center">
+                            <h6>Numero de valoraciones</h6>
+                        </div>
                     </div>
-                    
-                    
+
+
                 </div>
                 {{#clients}}
                 <div class="row my-2" data-client-id="{{idCustomer}}">
                     <div class="col-sm-1">
-                        <div class="row align-self-center justify-content-center"><h6>{{idCustomer}}</h6></div>
+                        <div class="row align-self-center justify-content-center">
+                            <h6>{{idCustomer}}</h6>
+                        </div>
                     </div>
                     <div class="col-sm-2">
-                        <div class="row align-self-center justify-content-center"><h6>{{email}}</h6></div>
+                        <div class="row align-self-center justify-content-center">
+                            <h6>{{email}}</h6>
+                        </div>
                     </div>
 
-                    <div class="col-sm-3"><!--Implementar con Api-->
-                        <div class="row align-self-center justify-content-center"><h6 name="orders-amount">{{ordersNumber}}</h6></div>
-                    </div>
-                    <div class="col-sm-3"><!--Implementar con api-->
-                        <div class="row align-self-center justify-content-center"><h6 name="reviews-amount">{{reviewsNumber}}</h6></div>
+                    <div class="col-sm-3">
+                        <!--Implementar con Api-->
+                        <div class="row align-self-center justify-content-center">
+                            <h6 name="orders-amount">{{ordersNumber}}</h6>
+                        </div>
                     </div>
                     <div class="col-sm-3">
-                        <form action="/admin/profile/delete/{{idCustomer}}" method="POST">
-                        <button class="btn btn-outline-danger">Eliminar</button>
-                    </form>
+                        <!--Implementar con api-->
+                        <div class="row align-self-center justify-content-center">
+                            <h6 name="reviews-amount">{{reviewsNumber}}</h6>
+                        </div>
                     </div>
+                    <div class="col-sm-2">
+                        <form action="/admin/profile/delete/{{idCustomer}}" method="POST">
+                            <button class="btn btn-outline-danger">Eliminar</button>
+                        </form>
+                    </div>
+                    {{#sadmin}}
+                    <div class="col-sm-1">
+                        <form action="/admin/sadmin/make/{{idCustomer}}" method="POST">
+                            <button name="btn-admin" data-admin="{{admin}}" class="btn btn-outline-warning">Admin</button>
+                        </form>
+                    </div>
+                    {{/sadmin}}
                 </div>
                 {{/clients}}
 

@@ -36,8 +36,7 @@ public class Product_Service {
     public List<Product> searchProduct(String str, int maxP , int minP){
         if(maxP == -1) maxP = Integer.MAX_VALUE;
         if(minP == -1) minP = Integer.MIN_VALUE;
-        System.out.println(str + " " + maxP + " " + minP);
-        if(str != "")return product_Repository.findByNameStartsWithAndPriceBetween(str, minP, maxP);
+        if(str != "")return product_Repository.findByNameContainingAndPriceBetween(str, minP, maxP);
         else return new ArrayList<>();
     }
 

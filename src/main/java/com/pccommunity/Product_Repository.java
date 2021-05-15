@@ -11,5 +11,5 @@ public interface Product_Repository extends JpaRepository<Product, Long>{
     List<Product> findByNameStartsWith(String name);
     List<Product> findByCategory(String category);
     List<Product> findByHighlighted(String str);
-    List<Product> findByNameStartsWithAndPriceBetween(String name, int priceL, int priceM);
+    List<Product> findByNameContainingAndPriceBetween(String name, int priceL, int priceM);
 }

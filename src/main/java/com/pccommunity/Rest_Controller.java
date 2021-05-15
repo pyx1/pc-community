@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class Rest_Controller {
+
+    @Autowired
+    private Logged_Customer lCustomer;
     @Autowired
     Client_Service client_Service;
     @Autowired
@@ -66,12 +69,14 @@ public class Rest_Controller {
 
     @PostMapping("/products/{id}") //Adding item by id to cart and returning products in cart, not units
     public Collection<Product> addToCartAPI(@PathVariable long id){
-        client_Service.addToCart(1, product_Service.getProduct(id), 1); //First client id
-        return client_Service.getallCart(1).keySet();
+        Product p1 = product_Service.getProduct(id);
+        product_Service.reduceStock(id, 1);
+        lCustomer.addToCart(p1, 1);
+        return lCustomer.getCart().keySet();
     }
     @GetMapping("/products/{id}/units") //Getting units from product in cart
     public ResponseEntity<Integer> howManyAPI(@PathVariable long id){
-        return new ResponseEntity<>(client_Service.getCartProdNumber(1, product_Service.getProduct(id)), HttpStatus.OK);
+        return new ResponseEntity<>(lCustomer.getCartProdNumber(product_Service.getProduct(id)), HttpStatus.OK);
     }
 
     @GetMapping("/orders") //Getting orders from a client as client view
@@ -86,26 +91,26 @@ public class Rest_Controller {
 
     @GetMapping("/cart") //Getting clients current cart
     public Map<Product, Integer> getCartProductsAPI(){
-        return client_Service.getallCart(1);
+        return lCustomer.getCart();
     }
 
 	@GetMapping("/cart/items")
 	public ResponseEntity<Collection<Product>> cartitemsAPI() {
-		return new ResponseEntity<>(client_Service.getallCart(1).keySet(), HttpStatus.OK);
+		return new ResponseEntity<>(lCustomer.getCart().keySet(), HttpStatus.OK);
 	}
     @GetMapping("/cart/{id}")
     public ResponseEntity<Integer> getCartNumberAPI(@PathVariable long id){
-        return new ResponseEntity<>(client_Service.getCartProdNumber(1, product_Service.getProduct(id)), HttpStatus.OK);
+        return new ResponseEntity<>(lCustomer.getCartProdNumber(product_Service.getProduct(id)), HttpStatus.OK);
     }
     @PostMapping("/cart/{id}") //Update cart in one
     public Map<Product, Integer> updateCartNumberAPI(@PathVariable long id){
-        client_Service.updateCartinOne(1, product_Service.getProduct(id));
-        return client_Service.getallCart(1);
+        lCustomer.updateCartinOne(product_Service.getProduct(id));
+        return lCustomer.getCart();
     } 
     @DeleteMapping("/cart/{id}") //Delete product from cart
     public Map<Product, Integer> deleteCartProdAPI(@PathVariable long id){
-        client_Service.deleteProduct(1, product_Service.getProduct(id));
-        return client_Service.getallCart(1);
+        lCustomer.deleteProduct(product_Service.getProduct(id));
+        return lCustomer.getCart();
     } 
 
     @PostMapping("/register") //Register endpoint
@@ -115,6 +120,7 @@ public class Rest_Controller {
         return new ResponseEntity<>(c1, HttpStatus.OK);
 
     }
+    /* ¡¡¡¡ FALTA ARREGLAR EL LOGIN !!! */
     @PostMapping("/login") //It should return the session cookie, but thats for the future
     public String loginNewClientAPI(@RequestBody List<String> data,  HttpServletResponse response){
         String consul = client_Service.loginClient(data.get(0), data.get(1));

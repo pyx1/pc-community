@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(){
-	//initialSet();
+	initialSet();
+    initialChange();
 })
 
 function initialSet(){
@@ -25,5 +26,15 @@ function initialSet(){
         });
         client.open("GET", "/api/admin/client/"+rtag[i].parentElement.parentElement.parentElement.getAttribute('data-client-id') + '/reviews/amount');
         client.send();
+    }
+}
+function initialChange() {
+    var btns = document.getElementsByName('btn-admin');
+    console.log(btns.length);
+    for (let i = 0; i < btns.length; i++) {
+        if (btns[i].getAttribute('data-admin') == "true") {
+            btns[i].classList.remove('btn-outline-warning');
+            btns[i].classList.add('btn-warning');
+        }
     }
 }

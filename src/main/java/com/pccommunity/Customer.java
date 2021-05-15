@@ -2,13 +2,17 @@ package com.pccommunity;
 
 import java.util.*;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
 public class Customer{
@@ -30,6 +34,9 @@ public class Customer{
     @OneToMany(mappedBy="client")
     private Set<Review> reviews;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles;
+
     public Customer() {
     }
     public Customer(New_Client nc){
@@ -37,8 +44,10 @@ public class Customer{
         this.surname = nc.getSurname();
         this.email = nc.getEmail();
         this.phone = nc.getPhone();
-        this.password = nc.getPassword();
+        this.password = new BCryptPasswordEncoder().encode(nc.getPassword());
         this.direction = nc.getDirection();
+        this.roles = new ArrayList<>();
+        this.roles.add("ROLE_USER");
     }
     public Customer(Customer c1){
         this.idCustomer = c1.idCustomer;
@@ -46,8 +55,10 @@ public class Customer{
         this.surname = c1.surname;
         this.email = c1.email;
         this.phone = c1.phone;
-        this.password = c1.password;
+        this.password = new BCryptPasswordEncoder().encode(c1.password);
         this.direction = c1.direction;
+        this.roles = new ArrayList<>();
+        this.roles.add("ROLE_USER");
     }
 
     public Customer(long id, String name, String surname, String email, String phone, String password, String direction){
@@ -56,8 +67,20 @@ public class Customer{
         this.surname = surname;
         this.email = email;
         this.phone = phone;
-        this.password = password;
+        this.password = new BCryptPasswordEncoder().encode(password);
         this.direction = direction;
+        this.roles = new ArrayList<>();
+        this.roles.add("ROLE_USER");
+    }
+    public Customer(String name, String surname, String email, String phone, String password, String direction){
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.phone = phone;
+        this.password = new BCryptPasswordEncoder().encode(password);
+        this.direction = direction;
+        this.roles = new ArrayList<>();
+        this.roles.add("ROLE_USER");
     }
     
 
@@ -82,7 +105,7 @@ public class Customer{
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = new BCryptPasswordEncoder().encode(password);
     }
 
     public void setDirection(String direction) {
@@ -115,6 +138,25 @@ public class Customer{
 
     public String getDirection() {
         return direction;
+    }
+
+    public List<String> getRoles(){
+        return this.roles;
+    }
+
+    public boolean getAdmin(){
+        for(String role : roles){
+            if(role.equals("ROLE_ADMIN"))return true;
+        }
+        return false;
+    }
+
+
+    public void makeAdmin(){
+        this.roles.add("ROLE_ADMIN");
+    }
+    public void makeSAdmin(){
+        this.roles.add("ROLE_SADMIN");
     }
     @JsonIgnore
     public int getOrdersNumber(){
