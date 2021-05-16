@@ -56,6 +56,7 @@
 
 function register() {
 	var r = document.getElementById('register').children;
+	//var cTok = document.getElementById("csrfToken").value;
 	var chck = true; //Check if all parameters set
 	for (let i = 0; i < r.length; i++) {
 		if (!r[i].value && r[i].type != "submit") chck = false;
@@ -76,6 +77,7 @@ function register() {
 			});
 			client.open("POST", "/register");
 			client.setRequestHeader("Content-type", "application/json");
+			//client.setRequestHeader("X-CSRF-Token", csrf);
 			var body = JSON.stringify(item);
 			client.send(body);
 			

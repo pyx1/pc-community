@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -147,6 +148,8 @@ public class Main_Controller {
 	public String product(Model model, @PathVariable long id, HttpServletRequest request) {
 		if (eManager.find(Product.class, id) != null) {
 			Product producto = product_Service.getProduct(id);
+			CsrfToken token = (CsrfToken) request.getAttribute("_csrf"); 
+			model.addAttribute("token", token.getToken());
 			model.addAttribute("producto", producto);
 			model.addAttribute("carrito", lCustomer.getCart().keySet());
 			model.addAttribute("reviews", review_Service.getReviewsFromProduct(producto));
@@ -169,7 +172,7 @@ public class Main_Controller {
 	}
 
 	@GetMapping("/login")
-	public String login(Model model) {
+	public String login(Model model, HttpServletRequest request) {
 		return "login";
 	}
 

@@ -40,8 +40,9 @@ function loadItems(){
 }
 
 function leaveReview(){
-    var holder = document.getElementById('new-number').value
-    var review = document.getElementById('new-review').value
+    var holder = document.getElementById('new-number').value;
+    var review = document.getElementById('new-review').value;
+    var csrf = document.getElementById("csrf-token").value;
     var client = new XMLHttpRequest();
     client.responseType = "json";
     client.addEventListener("load", function(){
@@ -52,5 +53,6 @@ function leaveReview(){
     var body = JSON.stringify(item);
     client.open("POST", "#");
     client.setRequestHeader("Content-type", "application/json");
+    client.setRequestHeader("X-CSRF-Token", csrf);
     client.send(body);
 }

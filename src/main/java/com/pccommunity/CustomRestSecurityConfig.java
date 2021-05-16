@@ -33,7 +33,6 @@ public class CustomRestSecurityConfig extends WebSecurityConfigurerAdapter{
         /* Else unlocked */
         http.authorizeRequests().anyRequest().permitAll();
 
-        http.csrf().disable();
 
         http.httpBasic();
 
