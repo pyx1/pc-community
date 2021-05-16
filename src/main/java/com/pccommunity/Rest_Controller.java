@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -80,13 +80,13 @@ public class Rest_Controller {
     }
 
     @GetMapping("/orders") //Getting orders from a client as client view
-    public Collection<Order> getOrdersFromClientAPI(){
-        return orders_Service.getOrdersByClient(client_Service.getClient(1));
+    public Collection<Order> getOrdersFromClientAPI(Authentication auth){
+        return orders_Service.getOrdersByClient(client_Service.getClientByEmail(auth.getName()));
     }
 
     @GetMapping("/reviews") //Getting reviews from a client
-    public Collection<Review> getReviewsFromClientAPI(){
-        return review_Service.getReviewsFromClient(client_Service.getClient(1));
+    public Collection<Review> getReviewsFromClientAPI(Authentication auth){
+        return review_Service.getReviewsFromClient(client_Service.getClientByEmail(auth.getName()));
     }
 
     @GetMapping("/cart") //Getting clients current cart
@@ -120,27 +120,19 @@ public class Rest_Controller {
         return new ResponseEntity<>(c1, HttpStatus.OK);
 
     }
-    /* ¡¡¡¡ FALTA ARREGLAR EL LOGIN !!! */
-    @PostMapping("/login") //It should return the session cookie, but thats for the future
-    public String loginNewClientAPI(@RequestBody List<String> data,  HttpServletResponse response){
-        String consul = client_Service.loginClient(data.get(0), data.get(1));
-        Cookie sescookie = new Cookie("sessionid", consul);
-		sescookie.setPath("/");
-		sescookie.setSecure(true);
-		response.addCookie(sescookie);
-        return consul;
+
+    @GetMapping("/login") //It should return the session cookie, but thats for the future
+    public String loginNewClientAPI(HttpServletResponse response, Authentication auth){
+        Customer c1 = client_Service.getClientByEmail(auth.getName());
+        String info = "Esta loggeado como:\nLogged_Customer{\n" +
+            "\tNombre: " + c1.getName() +"\n" +
+            "\tApellidos: " + c1.getSurname() +"\n" +
+            "\tEmail: " + c1.getEmail() +"\n" +
+            "\tDireccion: " + c1.getDirection() + "\n" + 
+            "\tTelefono: " + c1.getPhone() + "\n" + 
+        "}";
+        return info;
     }
-    @PostMapping("/logout")
-	public String logoutUser(@CookieValue(name = "sessionid", required = false) String sessionid, HttpServletResponse response) {
-		if (sessionid != null) {
-			Cookie sescookie = new Cookie("sessionid", "");
-			sescookie.setMaxAge(0);
-			sescookie.setPath("/");
-			sescookie.setSecure(true);
-			response.addCookie(sescookie);
-		}
-		return null;
-	}
 
     /* Admin Section */
     @PostMapping("/admin/product")
