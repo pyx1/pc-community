@@ -1,5 +1,44 @@
+var richeditor;
+ClassicEditor
+			.create( document.querySelector( '.rich-editor' ), {
+				
+				toolbar: {
+					items: [
+						'heading',
+						'|',
+						'bold',
+						'italic',
+						'link',
+						'|',
+						'insertTable',
+						'mediaEmbed',
+						'undo',
+						'redo'
+					]
+				},
+				language: 'es',
+				table: {
+					contentToolbar: [
+						'tableColumn',
+						'tableRow',
+						'mergeTableCells'
+					]
+				},
+				licenseKey: '',
+				
+				
+			} )
+			.then( editor => {
+				richeditor = editor;
+
+			} )
+			.catch( error => {
+				console.error( 'Oops, something went wrong!' );
+				console.error( error );
+			} );
 document.addEventListener("DOMContentLoaded", function(){
 	loadItems();
+
 })
 
 
@@ -42,7 +81,7 @@ function loadItems(){
 
 function leaveReview(){
     var holder = document.getElementById('new-number').value;
-    var review = document.getElementById('new-review').value;
+    var review = richeditor.getData();
     var csrf = document.getElementById("csrf-token").value;
     var client = new XMLHttpRequest();
     client.responseType = "json";

@@ -75,7 +75,7 @@
               <h6 class="my-0" style="font-size: large;">{{clientName}}</h6>
               <small class="text-muted noselect" name="stars-holder" stars-number="{{stars}}"></small>
               <!--9733 estrella llena, 9734 estrella vacia-->
-              <p style="font-size: small;">{{message}}</p>
+              <p style="font-size: small;">{{{message}}}</p>
             </div>
             {{/reviews}}
             <!--Hasta aqui el comentario-->
@@ -99,7 +99,9 @@
               </div>
               <div class="row my-1">
                 <div class="col-sm-12">
-                  <textarea type="text" id="new-review" style="height: 100px; width: 100%; font-size: 11px"></textarea>
+                  <div class="rich-editor">
+                    
+                  </div>
                 </div>
                 <div class="row my-1">
                   <div class="col.sm-9"></div>
