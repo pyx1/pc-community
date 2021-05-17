@@ -1,7 +1,6 @@
 package com.pccommunity;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.owasp.html.PolicyFactory;
 import org.owasp.html.Sanitizers;
@@ -36,7 +35,7 @@ public class Review_Service {
     }
 
     public int starsAverage(Product p1){
-        int counter = 0;
+        int counter = 1;
         int sum = 0;
         for(Review tmp : review_Repository.findByProduct(p1)){
             if(tmp.takeProduct().equals(p1)){

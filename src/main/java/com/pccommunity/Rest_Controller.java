@@ -3,7 +3,7 @@ package com.pccommunity;
 
 import java.util.*;
 
-import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,8 +95,13 @@ public class Rest_Controller {
     }
 
 	@GetMapping("/cart/items")
-	public ResponseEntity<Collection<Product>> cartitemsAPI() {
-		return new ResponseEntity<>(lCustomer.getCart().keySet(), HttpStatus.OK);
+	public ResponseEntity<Collection<Product>> cartitemsAPI(HttpServletRequest request) {
+        if(request.isUserInRole("USER")){
+            return new ResponseEntity<>(lCustomer.getCart().keySet(), HttpStatus.OK);
+        }
+		else{
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+        }
 	}
     @GetMapping("/cart/{id}")
     public ResponseEntity<Integer> getCartNumberAPI(@PathVariable long id){

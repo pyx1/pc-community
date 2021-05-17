@@ -27,6 +27,7 @@ public class CustomSecurityConfiguration extends WebSecurityConfigurerAdapter{
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/catalogo/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/catalogo/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/producto/**").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/cart/items").permitAll();
         http.csrf().ignoringAntMatchers("/catalogo");
         http.csrf().ignoringAntMatchers("/api/**");
         /* Reject the others */
