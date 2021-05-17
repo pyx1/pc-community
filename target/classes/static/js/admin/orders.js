@@ -16,6 +16,7 @@ function updateOrder(order_id){
     });
     client.open("PUT", "/admin/order/"+order_id);
     client.setRequestHeader("Content-type", "application/json");
+    client.setRequestHeader(document.getElementById("_csrfHeaders").content, document.getElementById("_csrf").content);
     client.send();
 }
 

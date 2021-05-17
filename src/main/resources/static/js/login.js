@@ -77,7 +77,7 @@ function register() {
 			});
 			client.open("POST", "/register");
 			client.setRequestHeader("Content-type", "application/json");
-			//client.setRequestHeader("X-CSRF-Token", csrf);
+			client.setRequestHeader(document.getElementById("_csrfHeaders").content, document.getElementById("_csrf").content);
 			var body = JSON.stringify(item);
 			client.send(body);
 			

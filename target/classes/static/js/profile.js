@@ -31,6 +31,7 @@ function saveChanges() {
             });
             client.open("POST", "/profile/" + id);
             client.setRequestHeader("Content-type", "application/json");
+            client.setRequestHeader(document.getElementById("_csrfHeaders").content, document.getElementById("_csrf").content);
             var body = JSON.stringify(item);
             client.send(body);
         }
@@ -44,6 +45,7 @@ function saveChanges() {
             });
             client.open("PUT", "/profile/" + id);
             client.setRequestHeader("Content-type", "application/json");
+            client.setRequestHeader(document.getElementById("_csrfHeaders").content, document.getElementById("_csrf").content);
             var body = JSON.stringify(item);
             client.send(body);
         }

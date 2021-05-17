@@ -22,6 +22,7 @@ function updatecart(id){
     var body = JSON.stringify(item);
     client.open("POST", "/cart");
     client.setRequestHeader("Content-type", "application/json");
+    client.setRequestHeader(document.getElementById("_csrfHeaders").content, document.getElementById("_csrf").content);
     client.send(body);
     
     
@@ -53,6 +54,6 @@ function leaveReview(){
     var body = JSON.stringify(item);
     client.open("POST", "#");
     client.setRequestHeader("Content-type", "application/json");
-    client.setRequestHeader("X-CSRF-Token", csrf);
+    client.setRequestHeader(document.getElementById("_csrfHeaders").content, document.getElementById("_csrf").content);
     client.send(body);
 }

@@ -22,7 +22,8 @@
 					<div id="login" class="col-md-12">
 						<form action="/login" method="POST">
 							<input type="email" name="email" placeholder="Correo electronico" class="login-top">
-							<input type="password" name="password" placeholder="Contrase&ntilde;a" class="login-bot">	
+							<input type="password" name="password" placeholder="Contrase&ntilde;a" class="login-bot">
+							<input type="hidden" name="_csrf" value="{{token}}"/>	
 							<input type="submit" class="login-button" value="Entrar">
 						</form>
 					</div>

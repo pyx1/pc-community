@@ -2,6 +2,7 @@ package com.pccommunity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 @Configuration
 @EnableWebSecurity
+@Order(value = 1)
 public class CustomSecurityConfiguration extends WebSecurityConfigurerAdapter{
     @Autowired
     private RepositoryAuthenticationProvider authenticationProvider;
@@ -25,7 +27,8 @@ public class CustomSecurityConfiguration extends WebSecurityConfigurerAdapter{
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/catalogo/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/catalogo/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/producto/**").permitAll();
-
+        http.csrf().ignoringAntMatchers("/catalogo");
+        http.csrf().ignoringAntMatchers("/api/**");
         /* Reject the others */
         http.authorizeRequests().antMatchers("/admin/sadmin/**").hasAnyRole("SADMIN");
         http.authorizeRequests().antMatchers("/admin/**").hasAnyRole("ADMIN");

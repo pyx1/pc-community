@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @Configuration
-@Order(value = 1)
+@Order(value = 2)
 public class CustomRestSecurityConfig extends WebSecurityConfigurerAdapter{
 
     @Autowired
@@ -20,8 +20,9 @@ public class CustomRestSecurityConfig extends WebSecurityConfigurerAdapter{
 
         http.authorizeRequests().antMatchers("/api/login").authenticated();
         /* User */
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/products/**").hasRole("USER");
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/products/**/units").hasRole("USER");
+
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/products/**").hasRole("USER");
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/products/**/units").hasRole("USER");
         http.authorizeRequests().antMatchers("/api/orders").hasRole("USER");
         http.authorizeRequests().antMatchers("/api/reviews").hasRole("USER");
         http.authorizeRequests().antMatchers("/api/cart").hasRole("USER");
@@ -33,7 +34,7 @@ public class CustomRestSecurityConfig extends WebSecurityConfigurerAdapter{
         /* Else unlocked */
         http.authorizeRequests().anyRequest().permitAll();
 
-
+        http.csrf().ignoringAntMatchers("/api/**");
         http.httpBasic();
 
         http.logout().logoutSuccessHandler((rq, rs, a) -> {}); //Anonimous function to avoid redirect

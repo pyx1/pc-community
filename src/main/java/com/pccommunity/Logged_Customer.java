@@ -39,13 +39,13 @@ public class Logged_Customer {
     public void updateCartinOne(Product p){
         Product inn = inCart(p);
         if(inn != null){
-            this.cart.put(p, this.cart.get(p) + 1);
+            this.cart.put(inn, this.cart.get(inn) + 1);
         }
     }
     public void updateCartinOneLess(Product p){
         Product inn = inCart(p);
         if(inn != null){
-            this.cart.put(p, this.cart.get(p) - 1);
+            this.cart.put(inn, this.cart.get(inn) - 1);
         }
     }
 

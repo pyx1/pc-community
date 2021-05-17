@@ -47,6 +47,7 @@ function search(){
     });
     client.open("POST", "/catalogo");
     client.setRequestHeader("Content-Type", "application/json");
+    //Prueba
     var body = JSON.stringify(item);
     client.send(body);
 }

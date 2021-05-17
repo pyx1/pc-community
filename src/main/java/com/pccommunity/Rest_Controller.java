@@ -105,11 +105,14 @@ public class Rest_Controller {
     @PostMapping("/cart/{id}") //Update cart in one
     public Map<Product, Integer> updateCartNumberAPI(@PathVariable long id){
         lCustomer.updateCartinOne(product_Service.getProduct(id));
+        product_Service.reduceStock(id, 1);
         return lCustomer.getCart();
     } 
     @DeleteMapping("/cart/{id}") //Delete product from cart
     public Map<Product, Integer> deleteCartProdAPI(@PathVariable long id){
-        lCustomer.deleteProduct(product_Service.getProduct(id));
+        int uds = lCustomer.getCartProdNumber(product_Service.getProduct(id));
+        product_Service.incrementStock(id, uds);
+        lCustomer.deleteProduct(product_Service.getProduct(id)); 
         return lCustomer.getCart();
     } 
 
@@ -121,15 +124,15 @@ public class Rest_Controller {
 
     }
 
-    @GetMapping("/login") //It should return the session cookie, but thats for the future
+    @GetMapping("/login") 
     public String loginNewClientAPI(HttpServletResponse response, Authentication auth){
         Customer c1 = client_Service.getClientByEmail(auth.getName());
         String info = "Esta loggeado como:\nLogged_Customer{\n" +
-            "\tNombre: " + c1.getName() +"\n" +
-            "\tApellidos: " + c1.getSurname() +"\n" +
-            "\tEmail: " + c1.getEmail() +"\n" +
-            "\tDireccion: " + c1.getDirection() + "\n" + 
-            "\tTelefono: " + c1.getPhone() + "\n" + 
+            "\tNombre: " + c1.getName() +",\n" +
+            "\tApellidos: " + c1.getSurname() +",\n" +
+            "\tEmail: " + c1.getEmail() +",\n" +
+            "\tDireccion: " + c1.getDirection() + ",\n" + 
+            "\tTelefono: " + c1.getPhone() + ",\n" + 
         "}";
         return info;
     }
