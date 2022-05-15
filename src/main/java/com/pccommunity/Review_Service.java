@@ -1,10 +1,12 @@
 package com.pccommunity;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
 
+import org.owasp.html.PolicyFactory;
+import org.owasp.html.Sanitizers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class Review_Service {
@@ -13,6 +15,9 @@ public class Review_Service {
     private Review_Repository review_Repository;
 
     public void addReview(Review r1, Customer c1, Product p1){
+        PolicyFactory sanitizer = Sanitizers.FORMATTING.and(Sanitizers.BLOCKS).and(Sanitizers.FORMATTING).and(Sanitizers.IMAGES).and(Sanitizers.STYLES)
+        .and(Sanitizers.TABLES).and(Sanitizers.LINKS); //The library implemented in js already sanitize but just in case
+        r1.setMessage(sanitizer.sanitize(r1.getMessage()));
         r1.assingProduct(p1);
         r1.setClient(c1);
         review_Repository.saveAndFlush(r1);
@@ -30,7 +35,7 @@ public class Review_Service {
     }
 
     public int starsAverage(Product p1){
-        int counter = 0;
+        int counter = 1;
         int sum = 0;
         for(Review tmp : review_Repository.findByProduct(p1)){
             if(tmp.takeProduct().equals(p1)){

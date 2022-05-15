@@ -1,5 +1,44 @@
+var richeditor;
+ClassicEditor
+			.create( document.querySelector( '.rich-editor' ), {
+				
+				toolbar: {
+					items: [
+						'heading',
+						'|',
+						'bold',
+						'italic',
+						'link',
+						'|',
+						'insertTable',
+						'mediaEmbed',
+						'undo',
+						'redo'
+					]
+				},
+				language: 'es',
+				table: {
+					contentToolbar: [
+						'tableColumn',
+						'tableRow',
+						'mergeTableCells'
+					]
+				},
+				licenseKey: '',
+				
+				
+			} )
+			.then( editor => {
+				richeditor = editor;
+
+			} )
+			.catch( error => {
+				console.error( 'Oops, something went wrong!' );
+				console.error( error );
+			} );
 document.addEventListener("DOMContentLoaded", function(){
 	loadItems();
+
 })
 
 
@@ -22,6 +61,7 @@ function updatecart(id){
     var body = JSON.stringify(item);
     client.open("POST", "/cart");
     client.setRequestHeader("Content-type", "application/json");
+    client.setRequestHeader(document.getElementById("_csrfHeaders").content, document.getElementById("_csrf").content);
     client.send(body);
     
     
@@ -40,8 +80,9 @@ function loadItems(){
 }
 
 function leaveReview(){
-    var holder = document.getElementById('new-number').value
-    var review = document.getElementById('new-review').value
+    var holder = document.getElementById('new-number').value;
+    var review = richeditor.getData();
+    var csrf = document.getElementById("csrf-token").value;
     var client = new XMLHttpRequest();
     client.responseType = "json";
     client.addEventListener("load", function(){
@@ -52,5 +93,6 @@ function leaveReview(){
     var body = JSON.stringify(item);
     client.open("POST", "#");
     client.setRequestHeader("Content-type", "application/json");
+    client.setRequestHeader(document.getElementById("_csrfHeaders").content, document.getElementById("_csrf").content);
     client.send(body);
 }

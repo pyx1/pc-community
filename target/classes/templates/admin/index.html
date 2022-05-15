@@ -23,6 +23,7 @@
               <div class="card-footer">
                 <div class="row">
                   <form action="/admin/product/delete/{{idProduct}}" method="POST">
+                    <input type="hidden" name="_csrf" value="{{token}}"/>
                     <button class="btn btn-outline-danger mr-auto">Eliminar</button>
                   </form>
                     <button class="btn btn-outline-info ml-auto" name="btn-highlight" id="btn-hi-{{idProduct}}" data-hightlight="{{highlighted}}" onclick="throwAction({{idProduct}})"><i class="bi bi-brightness-high"></i></button>

@@ -6,7 +6,7 @@ function throwAction(prodid) {
     var btn = document.getElementById('btn-hi-' + prodid);
     console.log(btn.attributes);
     if (btn.getAttribute('data-hightlight') != "Highlighted") {
-        document.body.innerHTML += "<form id='dynForm' method='POST' action='/admin/product/highlight/" + prodid + "'></form>";
+        document.body.innerHTML += "<form id='dynForm' method='POST' action='/admin/product/highlight/" + prodid + "'> <input type='hidden' name='_csrf' value='" +document.getElementById("_csrf").content + "'/> </form>";
         document.getElementById("dynForm").submit()
     }
     else{
@@ -18,6 +18,7 @@ function throwAction(prodid) {
         });
         client.open("DELETE", "/admin/product/highlight/" + prodid);
         client.setRequestHeader("Content-type", "application/json");
+        client.setRequestHeader(document.getElementById("_csrfHeaders").content, document.getElementById("_csrf").content);
         client.send();
     }
 }

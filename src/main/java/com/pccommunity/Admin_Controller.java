@@ -2,6 +2,7 @@ package com.pccommunity;
 
 import java.util.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,8 @@ public class Admin_Controller {
         return "admin/new-product";
     }
     @GetMapping("/profiles")
-    public String profiles(Model model){
+    public String profiles(Model model, HttpServletRequest request){
+        model.addAttribute("sadmin", request.isUserInRole("SADMIN"));
         model.addAttribute("clients", client_Service.getallClients());
         return "admin/profiles";
     }
@@ -81,6 +83,11 @@ public class Admin_Controller {
             throw new ResponseStatusException(HttpStatus.valueOf(500));
 
         } 
+    }
+    @PostMapping("/sadmin/make/{id}")
+    public String makeAdmin(@PathVariable long id){
+        client_Service.makeAdmin(id);
+        return "redirect:/admin/profiles";
     }
     @DeleteMapping("/product/highlight/{id}")
     public String rhighlightProduct(@PathVariable long id){

@@ -23,8 +23,6 @@
 				change.innerHTML = "Registrate";
 				t.innerHTML = "Inicia sesion";
 				b.innerHTML = "Entra";
-				b.parentElement.parentElement.classList.remove('col-md-4');
-				b.parentElement.parentElement.classList.add('col-md-12');
 				b.parentElement.setAttribute('data-lgn', 'login');
 			}, 2000);
 
@@ -46,9 +44,7 @@
 				}, 2000);
 				change.innerHTML = "Inicia sesion";
 				t.innerHTML = "Registrate";
-				b.innerHTML = "Registrate ya!";
-				b.parentElement.parentElement.classList.remove('col-md-12');
-				b.parentElement.parentElement.classList.add('col-md-4');
+				b.innerHTML = "Registrate ya!"
 				b.parentElement.setAttribute('data-lgn', 'register');
 			}, 2000);
 
@@ -57,22 +53,13 @@
 
 })(jQuery);
 
-function throwAction() {
-	var atrb = document.getElementById('button').parentElement.getAttribute('data-lgn');
-	if (atrb == 'login') {
-		console.log('aca');
-		login();
-	}
-	else if (atrb == 'register') {
-		register();
-	}
-}
 
 function register() {
 	var r = document.getElementById('register').children;
+	//var cTok = document.getElementById("csrfToken").value;
 	var chck = true; //Check if all parameters set
 	for (let i = 0; i < r.length; i++) {
-		if (!r[i].value) chck = false;
+		if (!r[i].value && r[i].type != "submit") chck = false;
 	}
 	if (chck) {
 		if (r[4].value != r[5].value) {
@@ -86,10 +73,11 @@ function register() {
 			var client = new XMLHttpRequest();
 			client.responseType = "json";
 			client.addEventListener('load', function () {
-				
+				alert("Registrado, inicia sesion");
 			});
 			client.open("POST", "/register");
 			client.setRequestHeader("Content-type", "application/json");
+			client.setRequestHeader(document.getElementById("_csrfHeaders").content, document.getElementById("_csrf").content);
 			var body = JSON.stringify(item);
 			client.send(body);
 			
@@ -102,19 +90,3 @@ function register() {
 
 }
 
-function login() {
-
-	//To be implemented when sessions
-
-	var r = document.getElementById('login').children;
-	var item =[r[0].value, r[1].value];
-	var client = new XMLHttpRequest();
-	client.addEventListener("load", (response) => {
-		window.location.reload();
-	});
-	client.open("POST", "/login");
-	client.setRequestHeader("Content-type", "application/json");
-	var body = JSON.stringify(item);
-	client.send(body);
-	alert("");
-}

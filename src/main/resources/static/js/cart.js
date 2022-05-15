@@ -64,6 +64,7 @@ function deleteProd(id){
     });
     client.open("DELETE", "/cart");
     client.setRequestHeader("Content-type", "application/json");
+    client.setRequestHeader(document.getElementById("_csrfHeaders").contentEditable, document.getElementById("_csrf").content);
     var body = JSON.stringify(id);
     client.send(body);
 }
@@ -97,6 +98,7 @@ function finishShopping() {
     });
     client.open("POST", "/complete");
     client.setRequestHeader("Content-type", "application/json");
+    client.setRequestHeader(document.getElementById("_csrfHeaders").content, document.getElementById("_csrf").content);
     var body = JSON.stringify(item);
     client.send(body);
 

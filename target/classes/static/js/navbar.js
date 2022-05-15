@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", function(){
 	changepath();
-    setcartspan();
+    if(!document.location.pathname.startsWith("/login"))setcartspan();
 })
 
 function createSElem(element){
     var child = document.createElement('DIV');
-    child.innerHTML = "<div class='row' style='height: 75px; width: 100%;'> \
+    child.innerHTML = "<div class='row search-item' style='height: 75px; width: 100%;'> \
     <div class='col-4' style='border-right: 1px #000000 solid'> \
       <div class='row ml-1 justify-content-center align-items-center' style='height: 100%;'>\
         <img src='"+ element.imageSource +"' style='height: 50px; width: 50px;'> \
@@ -25,16 +25,31 @@ function createSElem(element){
 function search(){
     var sbox = document.getElementById('searchBar');
     var search = sbox.value;
+    var prices = document.getElementsByClassName("price-limit");
+    var item ={
+        "name" : search,
+        "max" : prices[1].value != "" ? prices[1].value : "-1",
+        "min" : prices[0].value != "" ? prices[0].value : "-1"
+    }; 
     var client = new XMLHttpRequest();
     client.responseType = "json";
+    
     client.addEventListener("load", function(){
-        document.getElementById('searchPlacer').innerHTML="";
+        let exg = document.getElementById("searchPlacer").innerHTML="";
+        let pri = document.getElementById("searchPrices");
+        
         for(let elem in this.response){
             createSElem(this.response[elem]);
         }
+        if(search == "" && prices[0].value == "" && prices[1].value == "")pri.classList.add("hidden");
+        else pri.classList.remove("hidden");
+        console.log(this.response);
     });
     client.open("POST", "/catalogo");
-    client.send(search);
+    client.setRequestHeader("Content-Type", "application/json");
+    //Prueba
+    var body = JSON.stringify(item);
+    client.send(body);
 }
 function changepath(){
     var path = window.location.pathname;

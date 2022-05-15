@@ -24,6 +24,8 @@ public class Error_Controller implements ErrorController {
                 return "error-500";
             }   else if (statusCode == HttpStatus.UNAUTHORIZED.value()) {
                 return "error-401";
+            }else if (statusCode == 403) {
+                return "error-403";
             }
         }
         return "error";
